@@ -1,0 +1,23 @@
+{
+    "enabled": true,
+    "neededInstalledMods": [],
+    "neededUninstalledMods": [],
+    "spawns": [
+        {
+            "id": "minior-1",
+            "pokemon": "minior",
+            "presets": [
+                "natural"
+            ],
+            "type": "pokemon",
+            "spawnablePositionType": "grounded",
+            "bucket": "common",
+            "level": "5-32",
+            "weight": 100.0,
+            "condition": {
+                "minSkyLight": 8,
+                "maxSkyLight": 15
+            }
+        }
+    ]
+}
