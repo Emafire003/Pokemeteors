@@ -18,6 +18,12 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${property("junit_version")}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
+
+    //OhMyMeteors && dependencies
+    modCompileOnly("maven.modrinth:ohmymeteors:${property("omm_fabric")}")
+    modCompileOnly("maven.modrinth:structureplacerapi:${property("structureplacerapi_fabric")}") //StructurePlacerAPI
+    modCompileOnly("maven.modrinth:particleanimationlib:${property("pal_fabric")}") //PAL
+    implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert
 }
 
 tasks.test {
