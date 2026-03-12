@@ -1,9 +1,8 @@
-package me.emafire003.dev.pokemeteors.common;
+package me.emafire003.dev.pokemeteors.common.util;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.ohmymeteors.config.Config;
-import me.emafire003.dev.ohmymeteors.entities.MeteorProjectileEntity;
 import me.emafire003.dev.ohmymeteors.entities.OMMEntities;
 import me.emafire003.dev.ohmymeteors.util.MeteorUtils;
 import me.emafire003.dev.pokemeteors.common.entity.PokeMeteorEntity;
@@ -11,7 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public class PokemeteorUtils {

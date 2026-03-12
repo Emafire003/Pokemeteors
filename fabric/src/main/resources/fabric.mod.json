@@ -13,6 +13,9 @@
   "entrypoints": {
     "main": [
       "me.emafire003.dev.pokemeteors.fabric.PokemeteorsFabric"
+    ],
+    "client": [
+      "me.emafire003.dev.pokemeteors.fabric.PokemeteorsClientFabric"
     ]
   },
   "depends": {

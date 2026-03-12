@@ -12,7 +12,6 @@ public class PokemeteorsClientFabric implements ClientModInitializer {
     }
 
     public static void registerEntityStuff(){
-        //EntityModelLayerRegistry.registerModelLayer(BaseTntMeteorEntityModel.METEOR, BaseTntMeteorEntityModel::getTexturedModelData);
         EntityRendererRegistry.register(PKMFabricEntities.POKE_METEOR, PokeMeteorEntityRenderer::new);
     }
 }
