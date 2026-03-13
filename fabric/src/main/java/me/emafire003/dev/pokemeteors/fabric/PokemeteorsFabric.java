@@ -3,6 +3,10 @@ package me.emafire003.dev.pokemeteors.fabric;
 import me.emafire003.dev.pokemeteors.common.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.fabric.entity.PKMFabricEntities;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.io.IOException;
+import java.nio.file.Files;
 
 public final class PokemeteorsFabric implements ModInitializer {
     //public static final String MOD_ID = "pokemeteors";
@@ -13,7 +17,12 @@ public final class PokemeteorsFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PokemeteorsCommon.init();
+        try {
+            Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        PokemeteorsCommon.init(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
         PKMFabricEntities.registerEntities();
     }
 }
