@@ -4,8 +4,8 @@
     "neededUninstalledMods": [],
     "spawns": [
         {
-            "id": "minior-1",
-            "pokemon": "minior",
+            "id": "clefairy-1",
+            "pokemon": "clefairy",
             "presets": [
                 "natural"
             ],

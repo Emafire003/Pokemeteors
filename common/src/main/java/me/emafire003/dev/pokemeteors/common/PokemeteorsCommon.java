@@ -10,9 +10,14 @@ import com.google.gson.GsonBuilder;
 import me.emafire003.dev.pokemeteors.common.util.PokemeteorUtils;
 import me.emafire003.dev.pokemeteors.common.util.SpeciesMeteorChance;
 import me.emafire003.dev.pokemeteors.common.util.SpeciesMeteorConfig;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +35,16 @@ public class PokemeteorsCommon {
 
     public static ResourceLocation getIdentifier(String path){
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+
+    public static final TagKey<Block> METEOR_BYPASSES = TagKey.create(Registries.BLOCK, getIdentifier("meteor_bypasses"));
+    public static final TagKey<Block> METEOR_BYPASSES_AND_DESTROY = TagKey.create(Registries.BLOCK, getIdentifier("meteor_bypasses_and_destroy"));
+
+    @SuppressWarnings("unused")
+    public static void registerTags(){
+        HolderSet.Named<Block> METEOR_BYPASSES_TAG = BuiltInRegistries.BLOCK.getOrCreateTag(METEOR_BYPASSES);
+        HolderSet.Named<Block> METEOR_BYPASSES_AND_DESTROY_TAG = BuiltInRegistries.BLOCK.getOrCreateTag(METEOR_BYPASSES_AND_DESTROY);
+
     }
 
     public static void init(Path configPath){
