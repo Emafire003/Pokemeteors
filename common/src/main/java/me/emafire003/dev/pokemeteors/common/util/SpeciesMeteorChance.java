@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class SpeciesMeteorChance {
-    ResourceLocation species;
+    ResourceLocation species; //TODO migrate to string and then parse
     int chance;
     List<ResourceLocation> biome_filter;
 

@@ -41,25 +41,42 @@ dependencies {
 
     //OhMyMeteors && dependencies
     modImplementation("maven.modrinth:ohmymeteors:${property("omm_fabric")}")
-    modImplementation(files("run/libs/structureplacerapi-2.1.0+1.21.1+mjmps.jar"))
+    modImplementation(files("run/libs/structureplacerapi-2.1.0+1.21.1.jar"))
     //TODO FIX modImplementation("maven.modrinth:structureplacerapi:${property("structureplacerapi_fabric")}") //StructurePlacerAPI
     modImplementation("maven.modrinth:particleanimationlib:${property("pal_fabric")}") //PAL
     implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert
+
 }
+
+
 
 tasks {
     test {
         useJUnitPlatform()
     }
 
+    val copyMixin by registering(Copy::class) {
+        from(project(":common").file("src/resources/${project.property("mod_id")}.mixins.json"))
+        into(file("src/resources"))
+    }
+
     processResources {
+        mustRunAfter(copyMixin)
+        inputs.property("version", project.version)
+
+        filesMatching("fabric.mod.json") {
+            expand(project.properties)
+        }
+    }
+
+    /*processResources {
         inputs.property("version", project.version)
 
         filesMatching("fabric.mod.json") {
             expand(project.properties)
         }
 
-    }
+    }*/
 
     jar {
         archiveBaseName.set("${rootProject.property("archives_base_name")}-${project.name}")

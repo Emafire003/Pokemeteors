@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "me.emafire003.dev.pokemeteors.common.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "minVersion": "0.8",
+  "mixins": [
+    "SpawnPokemonCommandMixin",
+    "SpawnPokemonEventMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+  ]
+}

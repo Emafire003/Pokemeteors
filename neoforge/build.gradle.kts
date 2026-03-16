@@ -60,7 +60,13 @@ tasks {
         useJUnitPlatform()
     }
 
+    val copyMixin by registering(Copy::class) {
+        from(project(":common").file("src/resources/${project.property("mod_id")}.mixins.json"))
+        into(file("src/resources"))
+    }
+
     processResources {
+        mustRunAfter(copyMixin)
         inputs.property("version", project.version)
 
         filesMatching("META-INF/neoforge.mods.toml") {

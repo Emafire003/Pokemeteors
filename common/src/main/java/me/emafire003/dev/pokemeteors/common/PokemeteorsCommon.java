@@ -2,21 +2,15 @@ package me.emafire003.dev.pokemeteors.common;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
-import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition;
-import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import com.cobblemon.mod.common.pokemon.Species;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import me.emafire003.dev.pokemeteors.common.util.PokemeteorUtils;
 import me.emafire003.dev.pokemeteors.common.util.SpeciesMeteorChance;
 import me.emafire003.dev.pokemeteors.common.util.SpeciesMeteorConfig;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +49,7 @@ public class PokemeteorsCommon {
         SPECIES_CHANCE_CONFIG = readPokemeteorsFile(configPath);
 
         CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(spawnEvent -> {
-            PokemonEntity pokemon = spawnEvent.getEntity();
+            /*PokemonEntity pokemon = spawnEvent.getEntity();
             SpawnablePosition spawnablePosition = spawnEvent.getSpawnablePosition();
             Species sp = pokemon.getExposedSpecies();//clefairy
 
@@ -68,7 +62,7 @@ public class PokemeteorsCommon {
                 }
             }
             //This is here to prevent a double pokespawn
-            spawnEvent.cancel();
+            spawnEvent.cancel();*/
 
         });
     }

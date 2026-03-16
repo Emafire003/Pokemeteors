@@ -18,6 +18,9 @@
       "me.emafire003.dev.pokemeteors.fabric.PokemeteorsClientFabric"
     ]
   },
+  "mixins": [
+    "pokemeteors.mixins.json"
+  ],
   "depends": {
     "minecraft": "1.21.1",
     "cobblemon": ">=1.7.3 <1.8.0",

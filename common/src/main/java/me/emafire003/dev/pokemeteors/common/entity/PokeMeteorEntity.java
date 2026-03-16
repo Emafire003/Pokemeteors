@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.ohmymeteors.entities.MeteorProjectileEntity;
 import me.emafire003.dev.ohmymeteors.util.scheduler.SchedulerUtils;
+import me.emafire003.dev.pokemeteors.common.PokemeteorsCommon;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
@@ -37,6 +38,9 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         super(entityType, world);
         this.targetPos = targetPos;
         this.spawnedPokemon = spawnedPokemon;
+        if(this.getSize() > 10){
+            this.setSize(10);
+        }
     }
 
     public PokemonEntity getSpawnedPokemon() {
@@ -77,13 +81,13 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 ListTag front_messages =  structureBlockInfo.nbt().getCompound("front_text").getList("messages", Tag.TAG_STRING);//(ListTag) structureBlockInfo.nbt().getCompound("front_text").get("messages");
                 AtomicBoolean found = new AtomicBoolean(false);
                 front_messages.forEach(msg -> {
-                    if(msg.getAsString().equalsIgnoreCase("pokespawn")){
+                    if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                        found.set(true);
                     }
                 });
                 ListTag back_messages =  structureBlockInfo.nbt().getCompound("back_text").getList("messages", Tag.TAG_STRING);
                 back_messages.forEach(msg -> {
-                    if(msg.getAsString().equalsIgnoreCase("pokespawn")){
+                    if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                         found.set(true);
                     }
                 });
@@ -94,9 +98,13 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                     SchedulerUtils.runLater(5, (server) -> this.level().addFreshEntity(spawnedPokemon));
                     BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
                     StructureTemplate.StructureBlockInfo info;
+                    PokemeteorsCommon.LOGGER.info("The block found: " + this.level().getBlockState(structureBlockInfo.pos()));
+                    PokemeteorsCommon.LOGGER.info("The position: " + structureBlockInfo.pos().getBottomCenter());
                     if (blockEntity != null) {
+                        PokemeteorsCommon.LOGGER.info("The block found: " + this.level().getBlockState(structureBlockInfo.pos()));
                         info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), blockEntity.saveWithId(this.level().registryAccess()));
                     } else {
+                        PokemeteorsCommon.LOGGER.info("The block found: " + this.level().getBlockState(structureBlockInfo.pos()));
                         info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), null);
                     }
                     return info;
