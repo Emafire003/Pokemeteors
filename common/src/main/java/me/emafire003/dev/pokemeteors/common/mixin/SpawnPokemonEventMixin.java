@@ -9,7 +9,6 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.llamalad7.mixinextras.sugar.Local;
 import kotlin.Unit;
-import me.emafire003.dev.pokemeteors.common.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.common.util.PokemeteorUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -28,17 +27,17 @@ import static me.emafire003.dev.pokemeteors.common.PokemeteorsCommon.SPECIES_CHA
 @Mixin(SingleEntitySpawnAction.class)
 public abstract class SpawnPokemonEventMixin {
 
-	//TODO Test to make sure it works. for real this time.
+	//TODO actually o dont't know if it spawns the pokemon
 	@Inject(method = "run()Lcom/cobblemon/mod/common/api/spawning/detail/EntitySpawnResult;", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/world/entity/Entity;setPos(Lnet/minecraft/world/phys/Vec3;)V"), cancellable = true)
 	private void spawnMeteorInstead(CallbackInfoReturnable<EntitySpawnResult> cir, @Local(name = "e") Entity e){
-		PokemeteorsCommon.LOGGER.info("spam in scatola");
 		if(e instanceof PokemonEntity pokemon){
             //SpawnablePosition spawnablePosition = spawnEvent.getSpawnablePosition();
 			Species sp = pokemon.getExposedSpecies();//clefairy
 
 			//TODO test out. maybe just go back to the event thing?
 			if(SPECIES_CHANCE_CONFIG.contains(sp)){
+				//TODO remember to remvoe the debug true||
 				if(true || e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
 					if(!pokemon.level().isClientSide()){
 						PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, false);

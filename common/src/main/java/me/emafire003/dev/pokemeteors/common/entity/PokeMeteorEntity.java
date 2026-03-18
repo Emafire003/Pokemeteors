@@ -38,9 +38,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         super(entityType, world);
         this.targetPos = targetPos;
         this.spawnedPokemon = spawnedPokemon;
-        if(this.getSize() > 10){
-            this.setSize(10);
-        }
+        this.setSize(this.level().getRandom().nextInt(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon)));
     }
 
     public PokemonEntity getSpawnedPokemon() {
@@ -76,6 +74,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
 
 
+        AtomicBoolean spawned = new AtomicBoolean(false);
         placer.actionOnBlocksPlacedByStructure(((structureBlockInfo, serverLevelAccessor) -> {
             if(structureBlockInfo.state().getBlock() instanceof SignBlock && structureBlockInfo.nbt() != null){
                 ListTag front_messages =  structureBlockInfo.nbt().getCompound("front_text").getList("messages", Tag.TAG_STRING);//(ListTag) structureBlockInfo.nbt().getCompound("front_text").get("messages");
@@ -83,31 +82,30 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 front_messages.forEach(msg -> {
                     if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                        found.set(true);
+                       spawned.set(true);
                     }
                 });
                 ListTag back_messages =  structureBlockInfo.nbt().getCompound("back_text").getList("messages", Tag.TAG_STRING);
                 back_messages.forEach(msg -> {
                     if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                         found.set(true);
+                        spawned.set(false);
                     }
                 });
 
-                if(found.get()){
+                //TODO workout how to spawn multiple pokemon
+                if(found.get() && !spawned.get()){
                     spawnedPokemon.setPos(structureBlockInfo.pos().getBottomCenter());
                     //runs a tick later so the pokemon isn't damaged by the explosion
                     SchedulerUtils.runLater(5, (server) -> this.level().addFreshEntity(spawnedPokemon));
                     BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
                     StructureTemplate.StructureBlockInfo info;
-                    PokemeteorsCommon.LOGGER.info("The block found: " + this.level().getBlockState(structureBlockInfo.pos()));
-                    PokemeteorsCommon.LOGGER.info("The position: " + structureBlockInfo.pos().getBottomCenter());
                     if (blockEntity != null) {
-                        PokemeteorsCommon.LOGGER.info("The block found: " + this.level().getBlockState(structureBlockInfo.pos()));
                         info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), blockEntity.saveWithId(this.level().registryAccess()));
                     } else {
-                        PokemeteorsCommon.LOGGER.info("The block found: " + this.level().getBlockState(structureBlockInfo.pos()));
                         info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), null);
                     }
-                    return info;
+                    return info; //this is actually correct, it is retuning air. And also it actually gets here
                 }
             }
             return structureBlockInfo;

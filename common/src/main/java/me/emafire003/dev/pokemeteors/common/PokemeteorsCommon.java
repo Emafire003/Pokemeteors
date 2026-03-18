@@ -25,7 +25,7 @@ public class PokemeteorsCommon {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior"), 1));
+    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(), 1));
 
     public static ResourceLocation getIdentifier(String path){
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);

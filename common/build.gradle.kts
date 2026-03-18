@@ -22,9 +22,7 @@ dependencies {
 
     //OhMyMeteors && dependencies
     modCompileOnly("maven.modrinth:ohmymeteors:${property("omm_fabric")}")
-    //TODO make it right
-    modCompileOnly(files("run/libs/structureplacerapi-2.1.0+1.21.1.jar"))
-    //modCompileOnly("maven.modrinth:structureplacerapi:${property("structureplacerapi_fabric")}") //StructurePlacerAPI
+    modCompileOnly("maven.modrinth:structureplacerapi:${property("structureplacerapi_fabric")}") //StructurePlacerAPI
     modCompileOnly("maven.modrinth:particleanimationlib:${property("pal_fabric")}") //PAL
     implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert
 
