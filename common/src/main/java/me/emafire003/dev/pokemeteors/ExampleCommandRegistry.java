@@ -1,4 +1,4 @@
-package me.emafire003.dev.pokemeteors.common;
+package me.emafire003.dev.pokemeteors;
 
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.pokemon.Species;

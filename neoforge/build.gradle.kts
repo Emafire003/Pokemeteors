@@ -49,9 +49,9 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 
     //OhMyMeteors && dependencies
-    implementation("maven.modrinth:ohmymeteors:${property("omm_fabric")}")
-    implementation("maven.modrinth:structureplacerapi:${property("structureplacerapi_fabric")}") //StructurePlacerAPI
-    implementation("maven.modrinth:particleanimationlib:${property("pal_fabric")}") //PAL
+    implementation("maven.modrinth:ohmymeteors:${property("omm_version")}+neo")
+    implementation("maven.modrinth:structureplacerapi:${property("structureplacerapi_version")}+neo") //StructurePlacerAPI
+    implementation("maven.modrinth:particleanimationlib:${property("pal_version")}+1.21-neo") //PAL
     implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert
 }
 

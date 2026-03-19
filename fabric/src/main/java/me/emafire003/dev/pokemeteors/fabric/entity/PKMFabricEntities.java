@@ -1,7 +1,7 @@
 package me.emafire003.dev.pokemeteors.fabric.entity;
 
-import me.emafire003.dev.pokemeteors.common.PokemeteorsCommon;
-import me.emafire003.dev.pokemeteors.common.entity.PokeMeteorEntity;
+import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
+import me.emafire003.dev.pokemeteors.entity.PokeMeteorEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;

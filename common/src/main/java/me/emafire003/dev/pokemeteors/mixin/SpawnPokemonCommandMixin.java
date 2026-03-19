@@ -1,17 +1,17 @@
-package me.emafire003.dev.pokemeteors.common.mixin;
+package me.emafire003.dev.pokemeteors.mixin;
 
 import com.cobblemon.mod.common.command.SpawnPokemon;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import me.emafire003.dev.pokemeteors.common.util.PokemeteorUtils;
+import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-import static me.emafire003.dev.pokemeteors.common.PokemeteorsCommon.SPECIES_CHANCE_CONFIG;
+import static me.emafire003.dev.pokemeteors.PokemeteorsCommon.SPECIES_CHANCE_CONFIG;
 
 @Debug(export = true)
 @Mixin(SpawnPokemon.class)
@@ -22,8 +22,10 @@ public class SpawnPokemonCommandMixin {
         //TODO add an if clause to enable/disable the command thingy
         if(true){
             PokemonEntity pokemon = (PokemonEntity) arg;
+            //pokemon.getSpawnCause().getSpawner()
             //TODO remember to remvoe the debug true||
-            if(true || instance.getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(pokemon.getExposedSpecies())) == 0){
+            if(SPECIES_CHANCE_CONFIG.contains(pokemon.getExposedSpecies()) &&
+                    instance.getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(pokemon.getExposedSpecies())) == 0){
                 if(!instance.isClientSide()){
                     PokemeteorUtils.spawnMeteor(instance, arg.position(), pokemon, false);
                     return true;

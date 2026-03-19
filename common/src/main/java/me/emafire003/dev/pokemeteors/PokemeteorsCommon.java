@@ -1,17 +1,13 @@
-package me.emafire003.dev.pokemeteors.common;
+package me.emafire003.dev.pokemeteors;
 
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import me.emafire003.dev.pokemeteors.common.util.SpeciesMeteorChance;
-import me.emafire003.dev.pokemeteors.common.util.SpeciesMeteorConfig;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
+import me.emafire003.dev.pokemeteors.util.SpeciesMeteorChance;
+import me.emafire003.dev.pokemeteors.util.SpeciesMeteorConfig;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,20 +21,10 @@ public class PokemeteorsCommon {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(), 1));
+    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(), 1, 5, 2, MeteorSizeClass.SMALL, ""));
 
     public static ResourceLocation getIdentifier(String path){
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
-    }
-
-    public static final TagKey<Block> METEOR_BYPASSES = TagKey.create(Registries.BLOCK, getIdentifier("meteor_bypasses"));
-    public static final TagKey<Block> METEOR_BYPASSES_AND_DESTROY = TagKey.create(Registries.BLOCK, getIdentifier("meteor_bypasses_and_destroy"));
-
-    @SuppressWarnings("unused")
-    public static void registerTags(){
-        HolderSet.Named<Block> METEOR_BYPASSES_TAG = BuiltInRegistries.BLOCK.getOrCreateTag(METEOR_BYPASSES);
-        HolderSet.Named<Block> METEOR_BYPASSES_AND_DESTROY_TAG = BuiltInRegistries.BLOCK.getOrCreateTag(METEOR_BYPASSES_AND_DESTROY);
-
     }
 
     public static void init(Path configPath){
@@ -75,11 +61,13 @@ public class PokemeteorsCommon {
 
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
+                    .excludeFieldsWithoutExposeAnnotation()
                     .create();
 
             gson.toJson(SPECIES_CHANCE_CONFIG, bufferedWriter);
 
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -90,8 +78,12 @@ public class PokemeteorsCommon {
              BufferedReader bufferedReader = new BufferedReader(fileReader, 4096)) {
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
+                    .excludeFieldsWithoutExposeAnnotation()
                     .create();
             return gson.fromJson(bufferedReader, SpeciesMeteorConfig.class);
+        } catch (FileNotFoundException e){
+            generateDefaultFile(path);
+            return readPokemeteorsFile(path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

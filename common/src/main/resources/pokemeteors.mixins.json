@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "me.emafire003.dev.pokemeteors.common.mixin",
+  "package": "me.emafire003.dev.pokemeteors.mixin",
   "compatibilityLevel": "JAVA_16",
   "minVersion": "0.8",
   "mixins": [

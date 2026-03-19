@@ -1,7 +1,9 @@
-package me.emafire003.dev.pokemeteors.common.util;
+package me.emafire003.dev.pokemeteors.util;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Species;
+import com.google.gson.annotations.Expose;
+import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -10,16 +12,18 @@ import java.util.List;
 
 //TODO move to a datapack loader thingy
 public class SpeciesMeteorConfig {
+    @Expose
     List<SpeciesMeteorChance> speciesMeteorChances = new ArrayList<>();
-
-    private HashMap<String, Integer> cache = new HashMap<>();
+    HashMap<String, Integer> cache = new HashMap<>();
 
     public SpeciesMeteorConfig(SpeciesMeteorChance speciesMeteorChance){
         this.speciesMeteorChances.add(speciesMeteorChance);
+        cache = new HashMap<>();
     }
 
     public SpeciesMeteorConfig(List<SpeciesMeteorChance> speciesMeteorChances){
         this.speciesMeteorChances = speciesMeteorChances;
+        cache = new HashMap<>();
     }
 
     /** Checks if a given speciesMeteorChance is contained in this "map"*/
@@ -38,6 +42,9 @@ public class SpeciesMeteorConfig {
     }
 
     public boolean contains(String pokemon){
+        if(cache == null){
+            cache = new HashMap<>();
+        }
         if(cache.containsKey(pokemon)){
             return true;
         }
@@ -100,7 +107,7 @@ public class SpeciesMeteorConfig {
             }
         }
         //default
-        return 15;
+        return 5;
     }
 
     public int getMinMeteorSize(ResourceLocation pokemon){
@@ -125,6 +132,56 @@ public class SpeciesMeteorConfig {
 
     public int getMaxMeteorSize(PokemonEntity pokemon){
         return getMaxMeteorSize(pokemon.getExposedSpecies());
+    }
+
+    public MeteorSizeClass getSizeClass(String pokemon){
+        if(cache.containsKey(pokemon)){
+            return this.speciesMeteorChances.get(cache.get(pokemon)).getSizeClass();
+        }
+        for(int i = 0; i<this.speciesMeteorChances.size(); i++){
+            if(this.speciesMeteorChances.get(i).species.equals(pokemon)){
+                cache.put(pokemon, i);
+                return this.speciesMeteorChances.get(i).getSizeClass();
+            }
+        }
+        return MeteorSizeClass.SMALL;
+    }
+
+    public MeteorSizeClass getSizeClass(ResourceLocation pokemon){
+        return getSizeClass(pokemon.toString());
+    }
+
+    public MeteorSizeClass getSizeClass(Species pokemon){
+        return getSizeClass(pokemon.getResourceIdentifier());
+    }
+
+    public MeteorSizeClass getSizeClass(PokemonEntity pokemon){
+        return getSizeClass(pokemon.getExposedSpecies());
+    }
+
+    public String getSpecialMeteor(String pokemon){
+        if(cache.containsKey(pokemon)){
+            return this.speciesMeteorChances.get(cache.get(pokemon)).getSpecialMeteor();
+        }
+        for(int i = 0; i<this.speciesMeteorChances.size(); i++){
+            if(this.speciesMeteorChances.get(i).species.equals(pokemon)){
+                cache.put(pokemon, i);
+                return this.speciesMeteorChances.get(i).getSpecialMeteor();
+            }
+        }
+        return "";
+    }
+
+    public String getSpecialMeteor(ResourceLocation pokemon){
+        return getSpecialMeteor(pokemon.toString());
+    }
+
+    public String getSpecialMeteor(Species pokemon){
+        return getSpecialMeteor(pokemon.getResourceIdentifier());
+    }
+
+    public String getSpecialMeteor(PokemonEntity pokemon){
+        return getSpecialMeteor(pokemon.getExposedSpecies());
     }
 
 

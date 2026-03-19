@@ -1,8 +1,10 @@
 package me.emafire003.dev.pokemeteors.fabric;
 
-import me.emafire003.dev.pokemeteors.common.PokemeteorsCommon;
+import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
+import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.pokemeteors.fabric.entity.PKMFabricEntities;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
@@ -24,5 +26,18 @@ public final class PokemeteorsFabric implements ModInitializer {
         }
         PokemeteorsCommon.init(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
         PKMFabricEntities.registerEntities();
+
+        //TODO do the same for neoforge
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((minecraftServer, lifecycledResourceManager, b) -> {
+            //yes reloads for each dimension
+            //TODO maybe just pick one? Datapacks aren't per-dimension right? But multiverse and stuff exists so idk
+            minecraftServer.getAllLevels().forEach(PokemeteorUtils::reInitStructures);
+            //TODO swithc to datapack file
+            PokemeteorsCommon.LOGGER.info("Exists? " + FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID).resolve("pokemeteors_spawns.json").toFile().exists());
+            if(!FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID).resolve("pokemeteors_spawns.json").toFile().exists()){
+                PokemeteorsCommon.generateDefaultFile(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
+            }
+            PokemeteorsCommon.SPECIES_CHANCE_CONFIG = PokemeteorsCommon.readPokemeteorsFile(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
+        });
     }
 }

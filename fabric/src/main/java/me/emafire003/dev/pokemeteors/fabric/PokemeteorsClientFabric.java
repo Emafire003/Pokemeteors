@@ -1,6 +1,6 @@
 package me.emafire003.dev.pokemeteors.fabric;
 
-import me.emafire003.dev.pokemeteors.common.entity.client.PokeMeteorEntityRenderer;
+import me.emafire003.dev.pokemeteors.entity.client.PokeMeteorEntityRenderer;
 import me.emafire003.dev.pokemeteors.fabric.entity.PKMFabricEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;

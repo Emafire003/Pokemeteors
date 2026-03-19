@@ -1,4 +1,4 @@
-package me.emafire003.dev.pokemeteors.common.mixin;
+package me.emafire003.dev.pokemeteors.mixin;
 
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.events.entity.SpawnEvent;
@@ -9,7 +9,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.llamalad7.mixinextras.sugar.Local;
 import kotlin.Unit;
-import me.emafire003.dev.pokemeteors.common.util.PokemeteorUtils;
+import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static me.emafire003.dev.pokemeteors.common.PokemeteorsCommon.SPECIES_CHANCE_CONFIG;
+import static me.emafire003.dev.pokemeteors.PokemeteorsCommon.SPECIES_CHANCE_CONFIG;
 
 @Debug(export = true)
 @Mixin(SingleEntitySpawnAction.class)
