@@ -67,18 +67,17 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     @Override
     public void detonateWithStructure() {
         //TODO override the structure stuff to spawn this correctly
-        spawnedPokemon.setPos(this.getTargetPos().add(0, 10, 0)); //TODO remove, debug
-        this.level().addFreshEntity(spawnedPokemon);
+        /*spawnedPokemon.setPos(this.getTargetPos().add(0, 10, 0)); //TODO remove, debug
+        this.level().addFreshEntity(spawnedPokemon);*/
         super.detonateWithStructure();
     }
 
-    /**
-     * Returns the ID of the structure that is going to be spawned based the size class
-     *
-     * @param sizeClass The size of the meteors that we want to spawn, can be "small" "medium" "big" "huge"
-     * */
+
+    /**  the filter is used to only check some subfolders for that specific mon.
+     * For example if it's "minior" will only check "small/minior/" folder for the structures, or "big/minior/" etc
+     */
     @Override
-    public ResourceLocation getStructureToPlace(MeteorSizeClass sizeClass){
+    public ResourceLocation getStructureToPlace(MeteorSizeClass sizeClass, String filter){
         AtomicBoolean hasSpecial = new AtomicBoolean(false);
 
         if(METEOR_STRUCTURES.isEmpty() && !this.level().isClientSide()){
@@ -90,9 +89,19 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             return METEOR_STRUCTURES.getFirst();
         }
 
+
         List<ResourceLocation> structs = METEOR_STRUCTURES.stream().filter(identifier -> {
 
             if(!identifier.getPath().startsWith(sizeClass.getSerializedName())){
+                return false;
+            }
+            OhMyMeteors.LOGGER.info("has fileter: " + (filter != null && !filter.isEmpty()) + " filter" + filter);
+
+            OhMyMeteors.LOGGER.info("has name: " + identifier + " tf: " + identifier.getPath().startsWith(sizeClass.getSerializedName()+"/"+filter));
+
+
+            //also checks to see that it has the filter
+            if((filter != null && !filter.isEmpty()) && !identifier.getPath().startsWith(sizeClass.getSerializedName()+"/"+filter)){
                 return false;
             }
 
@@ -129,6 +138,19 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         return structure_id;
     }
 
+    //To avoid getting a null
+    @Override
+    public StructurePlacerAPI getPlacer(MeteorSizeClass sizeClass, String filter) {
+        int og_size = this.getSize();
+        if(this.getSize() < 2){
+            og_size = this.getSize();
+            this.setSize(3);
+        }
+        StructurePlacerAPI placer = super.getPlacer(sizeClass, filter);
+        this.setSize(og_size);
+        return placer;
+    }
+
     @Override
     //TODO the structures are going to be divided by the pokemon spawn, instead of small bug etc. aka "minior" will have its own set of meteors
     // and so on. If they aren't found, default to something else
@@ -139,9 +161,15 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
         //TODO add ability to select for folders, and for variants. So miniors will spawn with their color thingy
         if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon) != null && !PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).isEmpty()){
-            placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+            //this means there is a specific meteor file that is being searched
+            PokemeteorsCommon.LOGGER.info("the thing is: " + PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
+            if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).contains(":")){
+                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+            }else{
+                placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
+            }
         }else{
-            placer = super.getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon));
+            placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon));
         }
 
         AtomicBoolean spawned = new AtomicBoolean(false);
@@ -166,8 +194,12 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 //TODO workout how to spawn multiple pokemon
                 if(found.get() && !spawned.get()){
                     spawnedPokemon.setPos(structureBlockInfo.pos().getBottomCenter());
+                    PokemeteorsCommon.LOGGER.info("Setting pos to: " + structureBlockInfo.pos().getBottomCenter());
                     //runs a tick later so the pokemon isn't damaged by the explosion
-                    SchedulerUtils.runLater(5, (server) -> this.level().addFreshEntity(spawnedPokemon));
+                    SchedulerUtils.runLater(5, (server) -> {
+                        this.level().addFreshEntity(spawnedPokemon);
+                        PokemeteorsCommon.LOGGER.info("spawned pokemon at " + spawnedPokemon.position());
+                    });
                     BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
                     StructureTemplate.StructureBlockInfo info;
                     if (blockEntity != null) {

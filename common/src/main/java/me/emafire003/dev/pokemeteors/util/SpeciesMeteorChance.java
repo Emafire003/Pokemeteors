@@ -7,19 +7,26 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class SpeciesMeteorChance {
+    /// The pokemon's species formatted as an identifier so "cobblemon:minior" for example
     @Expose
     String species;
+    /// The 1 in x chances that each time that pokemon spawns will be along a meteor (1 in 1 is always)
     @Expose
     int chance;
+    /// The max meteor size that can spawn with this pokemon
     @Expose
     int max_meteor_size = 5;
+    /// The min meteor size that can spawn with this pokemon
     @Expose
     int min_meteor_size = 2;
+    /// The {@link MeteorSizeClass} of meteor that can spawn with this pokemon. These kind of structures are placed inside
+    /// "data/pokemeteors/structure/small" or /big or /medium etc like in ohmymeteors
     @Expose
     MeteorSizeClass meteor_size_class;
+    /// A string representing an identifier a specific meteor structure that should spawn along with this pokemon, like "pokemeteors:deoxys_special"
+    /// Or a folder containing a set of specific meteors like "minior". These will be searched in  "data/pokemeteors/structure/'meteor_size_class'/minior/"
     @Expose
     String special_meteor;
-    List<ResourceLocation> biome_filter;
 
     public SpeciesMeteorChance() {
     }
@@ -78,7 +85,6 @@ public class SpeciesMeteorChance {
         this.chance = chance;
         this.max_meteor_size = max_meteor_size;
         this.min_meteor_size = min_meteor_size;
-        this.biome_filter = biome_filter;
     }
 
     public ResourceLocation getSpecies() {

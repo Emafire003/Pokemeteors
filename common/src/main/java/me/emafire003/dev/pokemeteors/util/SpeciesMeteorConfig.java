@@ -156,6 +156,9 @@ public class SpeciesMeteorConfig {
     }
 
     public MeteorSizeClass getSizeClass(PokemonEntity pokemon){
+        if(pokemon == null){
+            return MeteorSizeClass.SMALL;
+        }
         return getSizeClass(pokemon.getExposedSpecies());
     }
 
@@ -181,6 +184,9 @@ public class SpeciesMeteorConfig {
     }
 
     public String getSpecialMeteor(PokemonEntity pokemon){
+        if(pokemon == null){
+            return "";
+        }
         return getSpecialMeteor(pokemon.getExposedSpecies());
     }
 
