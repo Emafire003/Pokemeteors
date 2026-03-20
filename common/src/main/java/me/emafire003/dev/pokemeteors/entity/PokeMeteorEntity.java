@@ -28,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static me.emafire003.dev.pokemeteors.util.PokemeteorUtils.METEOR_STRUCTURES;
 
@@ -39,6 +40,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
     public PokeMeteorEntity(EntityType<? extends AbstractHurtingProjectile> entityType, Level world) {
         super(entityType, world);
+        this.setSize(this.level().getRandom().nextInt(Math.min(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon)), Math.max(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon))));
     }
 
     public PokeMeteorEntity(EntityType<? extends AbstractHurtingProjectile> entityType, Level world, Vec3 targetPos, PokemonEntity spawnedPokemon) {
@@ -152,23 +154,41 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     }
 
     @Override
-    //TODO the structures are going to be divided by the pokemon spawn, instead of small bug etc. aka "minior" will have its own set of meteors
-    // and so on. If they aren't found, default to something else
     public StructurePlacerAPI getPlacer() {
         BlockPos m_pos_offset = BlockPos.containing(this.getDeltaMovement()).offset(-1, 0, -1);//new BlockPos(-1, -2, -1);
         StructurePlacerAPI placer =
                 new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
 
-        //TODO add ability to select for folders, and for variants. So miniors will spawn with their color thingy
-        if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon) != null && !PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).isEmpty()){
+        boolean aspectFound = false;
+        //First check if there is a unique meteor for that specific variant
+        PokemeteorsCommon.LOGGER.info("The aspect unique thingy: " + PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon));
+        if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon) != null){
+            AtomicReference<String> chosen_aspect_structure = new AtomicReference<>("");
+            spawnedPokemon.getAspects().forEach( (aspect) -> {
+                if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon).containsKey(aspect)){
+                    chosen_aspect_structure.set(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon).get(aspect));
+                }
+            });
+            if(!chosen_aspect_structure.get().isEmpty()){
+                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(chosen_aspect_structure.get()), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+                aspectFound = true;
+            }
+
+        }
+
+        //then checks if there is a specific meteor for the pokemon species
+        //If the aspectFound is true it means this should not run. It is here because if it isn't found but is declared,
+        // there might be a pool of unique meteors to spawn
+        if(!aspectFound && PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon) != null && !PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).isEmpty()){
             //this means there is a specific meteor file that is being searched
             PokemeteorsCommon.LOGGER.info("the thing is: " + PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
+            //If there is only one specific meteor file, spawn that
             if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).contains(":")){
-                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
-            }else{
+                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+            }else{ //otherwise spawn between the unique meteors for that type
                 placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
             }
-        }else{
+        }else if(!aspectFound){
             placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon));
         }
 
@@ -212,6 +232,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             }
             return structureBlockInfo;
         }), BlockTags.ALL_SIGNS);
+
         return placer;
         //super.getPlacer();
     }

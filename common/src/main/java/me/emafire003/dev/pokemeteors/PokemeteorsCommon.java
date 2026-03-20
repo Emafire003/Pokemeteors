@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PokemeteorsCommon {
 
@@ -21,7 +23,7 @@ public class PokemeteorsCommon {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(), 1, 5, 2, MeteorSizeClass.SMALL, ""));
+    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(), 1, 5, 2, MeteorSizeClass.SMALL, "minior", new HashMap<>(Map.of("blue-core", MOD_ID+":small/minior/small_blue"))));
 
     public static ResourceLocation getIdentifier(String path){
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
@@ -63,6 +65,8 @@ public class PokemeteorsCommon {
                     .setPrettyPrinting()
                     .excludeFieldsWithoutExposeAnnotation()
                     .create();
+            //Map<String, String> newMap = gson.fromJson(json, typeOfHashMap); // This type must match TypeToken
+
 
             gson.toJson(SPECIES_CHANCE_CONFIG, bufferedWriter);
 
@@ -80,6 +84,7 @@ public class PokemeteorsCommon {
                     .setPrettyPrinting()
                     .excludeFieldsWithoutExposeAnnotation()
                     .create();
+            //Type typeOfHashMap = new TypeToken<Map<String, String>>() { }.getType();
             return gson.fromJson(bufferedReader, SpeciesMeteorConfig.class);
         } catch (FileNotFoundException e){
             generateDefaultFile(path);

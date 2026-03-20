@@ -5,15 +5,19 @@ import com.cobblemon.mod.common.pokemon.Species;
 import com.google.gson.annotations.Expose;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //TODO move to a datapack loader thingy
 public class SpeciesMeteorConfig {
     @Expose
     List<SpeciesMeteorChance> speciesMeteorChances = new ArrayList<>();
+    @Expose
+    private final int version_do_not_touch = 1;
     HashMap<String, Integer> cache = new HashMap<>();
 
     public SpeciesMeteorConfig(SpeciesMeteorChance speciesMeteorChance){
@@ -127,10 +131,16 @@ public class SpeciesMeteorConfig {
     }
 
     public int getMinMeteorSize(PokemonEntity pokemon){
+        if(pokemon == null){
+            return 3;
+        }
         return getMinMeteorSize(pokemon.getExposedSpecies());
     }
 
     public int getMaxMeteorSize(PokemonEntity pokemon){
+        if(pokemon == null){
+            return 5;
+        }
         return getMaxMeteorSize(pokemon.getExposedSpecies());
     }
 
@@ -188,6 +198,35 @@ public class SpeciesMeteorConfig {
             return "";
         }
         return getSpecialMeteor(pokemon.getExposedSpecies());
+    }
+
+    @Nullable
+    public Map<String, String> getAspectUniqueMeteor(String pokemon){
+        if(cache.containsKey(pokemon)){
+            return this.speciesMeteorChances.get(cache.get(pokemon)).getAspectUniqueMeteor();
+        }
+        for(int i = 0; i<this.speciesMeteorChances.size(); i++){
+            if(this.speciesMeteorChances.get(i).species.equals(pokemon)){
+                cache.put(pokemon, i);
+                return this.speciesMeteorChances.get(i).getAspectUniqueMeteor();
+            }
+        }
+        return null;
+    }
+
+    public Map<String, String> getAspectUniqueMeteor(ResourceLocation pokemon){
+        return getAspectUniqueMeteor(pokemon.toString());
+    }
+
+    public Map<String, String> getAspectUniqueMeteor(Species pokemon){
+        return getAspectUniqueMeteor(pokemon.getResourceIdentifier());
+    }
+
+    public Map<String, String> getAspectUniqueMeteor(PokemonEntity pokemon){
+        if(pokemon == null){
+            return null;
+        }
+        return getAspectUniqueMeteor(pokemon.getExposedSpecies());
     }
 
 

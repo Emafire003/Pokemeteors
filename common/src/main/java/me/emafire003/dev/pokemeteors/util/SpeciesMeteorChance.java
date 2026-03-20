@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpeciesMeteorChance {
     /// The pokemon's species formatted as an identifier so "cobblemon:minior" for example
@@ -26,7 +28,11 @@ public class SpeciesMeteorChance {
     /// A string representing an identifier a specific meteor structure that should spawn along with this pokemon, like "pokemeteors:deoxys_special"
     /// Or a folder containing a set of specific meteors like "minior". These will be searched in  "data/pokemeteors/structure/'meteor_size_class'/minior/"
     @Expose
-    String special_meteor;
+    String unique_meteor;
+    /// A map of Aspect:Unique meteor, for example the minior line thingy
+    @Expose
+    HashMap<String, String> aspect_unique_meteor;
+
 
     public SpeciesMeteorChance() {
     }
@@ -47,6 +53,14 @@ public class SpeciesMeteorChance {
         this.min_meteor_size = min_meteor_size;
     }
 
+    public Map<String, String> getAspectUniqueMeteor() {
+        return aspect_unique_meteor;
+    }
+
+    public void setAspectUniqueMeteor(HashMap<String, String> aspect_unique_meteor) {
+        this.aspect_unique_meteor = aspect_unique_meteor;
+    }
+
     public SpeciesMeteorChance(String species, int chance) {
         this.species = species;
         this.chance = chance;
@@ -63,21 +77,31 @@ public class SpeciesMeteorChance {
         this.meteor_size_class = meteor_size_class;
     }
 
-    public SpeciesMeteorChance(String species, int chance, int max_meteor_size, int min_meteor_size, MeteorSizeClass meteor_size_class, String special_meteor) {
+    public SpeciesMeteorChance(String species, int chance, int max_meteor_size, int min_meteor_size, MeteorSizeClass meteor_size_class, String unique_meteor) {
         this.species = species;
         this.chance = chance;
         this.max_meteor_size = max_meteor_size;
         this.min_meteor_size = min_meteor_size;
         this.meteor_size_class = meteor_size_class;
-        this.special_meteor = special_meteor;
+        this.unique_meteor = unique_meteor;
+    }
+
+    public SpeciesMeteorChance(String species, int chance, int max_meteor_size, int min_meteor_size, MeteorSizeClass meteor_size_class, String unique_meteor, HashMap<String, String> aspect_unique_meteor) {
+        this.species = species;
+        this.chance = chance;
+        this.max_meteor_size = max_meteor_size;
+        this.min_meteor_size = min_meteor_size;
+        this.meteor_size_class = meteor_size_class;
+        this.unique_meteor = unique_meteor;
+        this.aspect_unique_meteor = aspect_unique_meteor;
     }
 
     public String getSpecialMeteor() {
-        return special_meteor;
+        return unique_meteor;
     }
 
     public void setSpecialMeteor(String special_meteor) {
-        this.special_meteor = special_meteor;
+        this.unique_meteor = special_meteor;
     }
 
     public SpeciesMeteorChance(String species, int chance, int max_meteor_size, int min_meteor_size, List<ResourceLocation> biome_filter) {
