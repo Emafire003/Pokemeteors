@@ -23,13 +23,33 @@ public class PokemeteorsCommon {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = new SpeciesMeteorConfig(new SpeciesMeteorChance(ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(), 1, 5, 2, MeteorSizeClass.SMALL, "minior", new HashMap<>(Map.of("blue-core", MOD_ID+":small/minior/small_blue"))));
+    public static final SpeciesMeteorConfig defaultConfigChance = new SpeciesMeteorConfig(
+            new SpeciesMeteorChance(
+                    ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(),
+                    1,
+                    5, 2,
+                    MeteorSizeClass.SMALL, "minior",
+                    new HashMap<>(Map.of(
+                            "blue-core", MOD_ID+":small/minior/small_blue",
+                            "indigo_core", MOD_ID+":small/minior/small_indigo",
+                            "yellow_core", MOD_ID+":small/minior/small_yellow",
+                            "green_core", MOD_ID+":small/minior/small_green",
+                            "orange_core", MOD_ID+":small/minior/small_orange",
+                            "red_core", MOD_ID+":small/minior/small_red",
+                            "violet_core", MOD_ID+":small/minior/small_violet"
+                    ))
+            )
+    );
+
+    public static SpeciesMeteorConfig SPECIES_CHANCE_CONFIG = defaultConfigChance;
 
     public static ResourceLocation getIdentifier(String path){
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     public static void init(Path configPath){
+
+
         //If the file doesn't exists, create the default one
         if(!configPath.resolve("pokemeteors_spawns.json").toFile().exists()){
             generateDefaultFile(configPath);
