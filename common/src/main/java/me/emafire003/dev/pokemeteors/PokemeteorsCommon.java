@@ -15,6 +15,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PokemeteorsCommon {
@@ -24,20 +25,28 @@ public class PokemeteorsCommon {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     public static final SpeciesMeteorConfig defaultConfigChance = new SpeciesMeteorConfig(
-            new SpeciesMeteorChance(
-                    ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(),
-                    1,
-                    5, 2,
-                    MeteorSizeClass.SMALL, "minior",
-                    new HashMap<>(Map.of(
-                            "blue-core", MOD_ID+":small/minior/small_blue",
-                            "indigo_core", MOD_ID+":small/minior/small_indigo",
-                            "yellow_core", MOD_ID+":small/minior/small_yellow",
-                            "green_core", MOD_ID+":small/minior/small_green",
-                            "orange_core", MOD_ID+":small/minior/small_orange",
-                            "red_core", MOD_ID+":small/minior/small_red",
-                            "violet_core", MOD_ID+":small/minior/small_violet"
-                    ))
+            List.of(
+                    new SpeciesMeteorChance(
+                            ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(),
+                            1,
+                            5, 2,
+                            MeteorSizeClass.SMALL, "minior",
+                            new HashMap<>(Map.of(
+                                    "blue-core", MOD_ID+":small/minior/small_blue",
+                                    "indigo-core", MOD_ID+":small/minior/small_indigo",
+                                    "yellow-core", MOD_ID+":small/minior/small_yellow",
+                                    "green-core", MOD_ID+":small/minior/small_green",
+                                    "orange-core", MOD_ID+":small/minior/small_orange",
+                                    "red-core", MOD_ID+":small/minior/small_red",
+                                    "violet-core", MOD_ID+":small/minior/small_violet"
+                            ))
+                    ),
+                    new SpeciesMeteorChance(
+                            ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "deoxys").toString(),
+                            1,
+                            20, 10,
+                            MeteorSizeClass.BIG, "pokemeteors:deoxys"
+                    )
             )
     );
 

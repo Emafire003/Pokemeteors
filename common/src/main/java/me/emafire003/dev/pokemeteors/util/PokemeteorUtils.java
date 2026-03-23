@@ -51,18 +51,6 @@ public class PokemeteorUtils {
             if(id.getPath().contains("ignoredefault") || id.getPath().contains("ignoredefaults")){
                 //TODO remove this mods' defaults
                 /*METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("big/special/big_meteor_cat"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("big/big_meteor_0"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("big/big_meteor_1"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("big/big_meteor_2"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("huge/huge_meteor_0"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("huge/huge_meteor_1"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("huge/huge_meteor_2"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/medium_meteor_0"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/medium_meteor_1"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/medium_meteor_2"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/special/medium_meteor_99"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("small/small_meteor_0"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("small/small_meteor_1"));
                 METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("small/small_meteor_2"));*/
                 METEOR_STRUCTURES.remove(id);
 
@@ -78,15 +66,14 @@ public class PokemeteorUtils {
     /**
      * Gets a meteor object to be spawned in, with a velocity oriented downwards and a spawn position already set up
      * */
-    public static PokeMeteorEntity getDownwardsMeteor(Vec3 targetSpawnPos, PokemonEntity spawnedPokemon, ServerLevel world, int min_spawn_d, int max_spawn_d, double spawn_height, int min_size, int max_size){
+    public static PokeMeteorEntity getDownwardsMeteor(Vec3 targetSpawnPos, PokemonEntity spawnedPokemon, ServerLevel world, int min_spawn_d, int max_spawn_d, double spawn_height){
         //TODO this can't really work since it needs to be on fabric/neoforge in a different way
         PokeMeteorEntity meteor = PlatformSpecificStuff.getSinglePokeMeteor(world, targetSpawnPos, spawnedPokemon);
         Tuple<Vec3, Vec3> pos_vel = MeteorUtils.getDownwardsMeteorPosAndVelocity(targetSpawnPos, world, min_spawn_d, max_spawn_d, spawn_height);
 
         meteor.setPosRaw(pos_vel.getA().x, pos_vel.getA().y, pos_vel.getA().z);
 
-        //TODO add variable or config mor max meteor size
-        meteor.setSize(world.getRandom().nextIntBetweenInclusive(Math.max(0, min_size), Math.min(50, max_size)));
+        meteor.setSize(world.getRandom().nextIntBetweenInclusive(Math.max(0, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon)), Math.min(50, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon))));
 
         meteor.setDeltaMovement(targetSpawnPos.subtract(meteor.position()).normalize().multiply(1,1,1).add(0, Config.DOWNWARDS_SPEED_MODIFIER, 0));
         
@@ -102,16 +89,16 @@ public class PokemeteorUtils {
      * @param silenced Weather or not the meteor should be announced in chat*/
     public static void spawnMeteor(ServerLevel world, Vec3 targetSpawnPos, PokemonEntity spawnedPokemon, boolean silenced){
         PokeMeteorEntity meteor = getDownwardsMeteor(targetSpawnPos, spawnedPokemon, world.getLevel(),
-                Config.MIN_METEOR_SPAWN_DISTANCE, Config.MAX_METEOR_SPAWN_DISTANCE, Config.METEOR_SPAWN_HEIGHT, Config.NATURAL_METEOR_MIN_SIZE, Config.NATURAL_METEOR_MAX_SIZE);
+                Config.MIN_METEOR_SPAWN_DISTANCE, Config.MAX_METEOR_SPAWN_DISTANCE, Config.METEOR_SPAWN_HEIGHT);
 
         meteor.setSilenced(silenced);
 
         String message;
 
-        if(Config.SPAWN_HUGE_METEORS){
+        /*if(Config.SPAWN_HUGE_METEORS){
             if(world.getRandom().nextIntBetweenInclusive(0, Config.HUGE_METEOR_CHANCE) == 0){
                 meteor = getDownwardsMeteor(targetSpawnPos, spawnedPokemon, world.getLevel(),
-                        Config.MIN_METEOR_SPAWN_DISTANCE, Config.MAX_METEOR_SPAWN_DISTANCE, Config.METEOR_SPAWN_HEIGHT, Config.MAX_BIG_METEOR_SIZE, Config.HUGE_METEOR_SIZE_LIMIT);
+                        Config.MIN_METEOR_SPAWN_DISTANCE, Config.MAX_METEOR_SPAWN_DISTANCE, Config.METEOR_SPAWN_HEIGHT);
 
                 message = "message.ohmymeteors.meteor_spawned.huge";
             } else {
@@ -119,8 +106,9 @@ public class PokemeteorUtils {
                 message = "message.ohmymeteors.meteor_spawned";
             }
         } else {
-            message = "message.ohmymeteors.meteor_spawned";
-        }
+
+        }*/
+        message = "message.ohmymeteors.meteor_spawned";
 
 //TODO maybe update with the pokemeteors messages
         if(Config.ANNOUNCE_METEOR_SPAWN && !meteor.isSilenced()){

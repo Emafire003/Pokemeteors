@@ -5,7 +5,6 @@ import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.ohmymeteors.config.Config;
 import me.emafire003.dev.ohmymeteors.entities.MeteorProjectileEntity;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
-import me.emafire003.dev.ohmymeteors.util.scheduler.SchedulerUtils;
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
@@ -40,14 +39,12 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
     public PokeMeteorEntity(EntityType<? extends AbstractHurtingProjectile> entityType, Level world) {
         super(entityType, world);
-        this.setSize(this.level().getRandom().nextInt(Math.min(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon)), Math.max(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon))));
     }
 
     public PokeMeteorEntity(EntityType<? extends AbstractHurtingProjectile> entityType, Level world, Vec3 targetPos, PokemonEntity spawnedPokemon) {
         super(entityType, world);
         this.targetPos = targetPos;
         this.spawnedPokemon = spawnedPokemon;
-        this.setSize(this.level().getRandom().nextInt(Math.min(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon)), Math.max(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon))));
     }
 
     public PokemonEntity getSpawnedPokemon() {
@@ -64,14 +61,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
     public void setTargetPos(Vec3 targetPos) {
         this.targetPos = targetPos;
-    }
-
-    @Override
-    public void detonateWithStructure() {
-        //TODO override the structure stuff to spawn this correctly
-        /*spawnedPokemon.setPos(this.getTargetPos().add(0, 10, 0)); //TODO remove, debug
-        this.level().addFreshEntity(spawnedPokemon);*/
-        super.detonateWithStructure();
     }
 
 
@@ -97,10 +86,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             if(!identifier.getPath().startsWith(sizeClass.getSerializedName())){
                 return false;
             }
-            OhMyMeteors.LOGGER.info("has fileter: " + (filter != null && !filter.isEmpty()) + " filter" + filter);
-
-            OhMyMeteors.LOGGER.info("has name: " + identifier + " tf: " + identifier.getPath().startsWith(sizeClass.getSerializedName()+"/"+filter));
-
 
             //also checks to see that it has the filter
             if((filter != null && !filter.isEmpty()) && !identifier.getPath().startsWith(sizeClass.getSerializedName()+"/"+filter)){
@@ -119,7 +104,12 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         }).toList();
 
         if (structs.isEmpty()){
-            PokemeteorsCommon.LOGGER.error("The list of structures for size class '" + sizeClass.getSerializedName() + "' is empty! Check that your structures are valid ones!");
+            if(filter != null && filter.isEmpty()){
+                PokemeteorsCommon.LOGGER.error("The list of structures for size class '{}' is empty! Check that your structures are valid ones!", sizeClass.getSerializedName());
+            }else {
+                PokemeteorsCommon.LOGGER.error("The list of structures for size class '{}' and filter '{}'is empty! Check that your structures are valid ones!", sizeClass.getSerializedName(), filter);
+            }
+
             structs = List.of(PokemeteorsCommon.getIdentifier("error"));
         }
 
@@ -161,7 +151,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
         boolean aspectFound = false;
         //First check if there is a unique meteor for that specific variant
-        PokemeteorsCommon.LOGGER.info("The aspect unique thingy: " + PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon));
         if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon) != null){
             AtomicReference<String> chosen_aspect_structure = new AtomicReference<>("");
             spawnedPokemon.getAspects().forEach( (aspect) -> {
@@ -181,7 +170,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         // there might be a pool of unique meteors to spawn
         if(!aspectFound && PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon) != null && !PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).isEmpty()){
             //this means there is a specific meteor file that is being searched
-            PokemeteorsCommon.LOGGER.info("the thing is: " + PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
             //If there is only one specific meteor file, spawn that
             if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).contains(":")){
                 placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
@@ -192,7 +180,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon));
         }
 
-        AtomicBoolean spawned = new AtomicBoolean(false);
         placer.actionOnBlocksPlacedByStructure(((structureBlockInfo, serverLevelAccessor) -> {
             if(structureBlockInfo.state().getBlock() instanceof SignBlock && structureBlockInfo.nbt() != null){
                 ListTag front_messages =  structureBlockInfo.nbt().getCompound("front_text").getList("messages", Tag.TAG_STRING);//(ListTag) structureBlockInfo.nbt().getCompound("front_text").get("messages");
@@ -200,26 +187,21 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 front_messages.forEach(msg -> {
                     if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                        found.set(true);
-                       spawned.set(true);
                     }
                 });
                 ListTag back_messages =  structureBlockInfo.nbt().getCompound("back_text").getList("messages", Tag.TAG_STRING);
                 back_messages.forEach(msg -> {
                     if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                         found.set(true);
-                        spawned.set(false);
                     }
                 });
 
                 //TODO workout how to spawn multiple pokemon
-                if(found.get() && !spawned.get()){
+                if(found.get()){
                     spawnedPokemon.setPos(structureBlockInfo.pos().getBottomCenter());
-                    PokemeteorsCommon.LOGGER.info("Setting pos to: " + structureBlockInfo.pos().getBottomCenter());
-                    //runs a tick later so the pokemon isn't damaged by the explosion
-                    SchedulerUtils.runLater(5, (server) -> {
-                        this.level().addFreshEntity(spawnedPokemon);
-                        PokemeteorsCommon.LOGGER.info("spawned pokemon at " + spawnedPokemon.position());
-                    });
+
+                    this.level().addFreshEntity(spawnedPokemon);
+
                     BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
                     StructureTemplate.StructureBlockInfo info;
                     if (blockEntity != null) {

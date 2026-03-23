@@ -2,6 +2,7 @@ package me.emafire003.dev.pokemeteors.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.pokemeteors.entity.PokeMeteorEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -45,7 +46,7 @@ public class PokeMeteorEntityRenderer extends EntityRenderer<PokeMeteorEntity> {
      */
     @Override
     public @NotNull ResourceLocation getTextureLocation(PokeMeteorEntity entity) {
-        //TODO change texture                        (vvv and modid vvv)
-        return ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/gray_concrete");
+        //TODO change texture                        (vvv and modid vvv) (maybe, i don't know tbf)
+        return ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "textures/block/meteoric_rock");
     }
 }
