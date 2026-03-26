@@ -33,12 +33,11 @@ public abstract class SpawnPokemonEventMixin {
 	private void spawnMeteorInstead(CallbackInfoReturnable<EntitySpawnResult> cir, @Local(name = "e") Entity e){
 		if(e instanceof PokemonEntity pokemon){
             //SpawnablePosition spawnablePosition = spawnEvent.getSpawnablePosition();
-			Species sp = pokemon.getExposedSpecies();//clefairy
+			Species sp = pokemon.getExposedSpecies();
 
 			//TODO test out. maybe just go back to the event thing?
-			if(SPECIES_CHANCE_CONFIG.contains(sp)){
-				//TODO remember to remvoe the debug true||
-				if(true || e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
+			if(SPECIES_CHANCE_CONFIG.contains(sp) && e.level().canSeeSky(e.blockPosition())){
+				if(e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
 					if(!pokemon.level().isClientSide()){
 						PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, false);
 						pokemon.finalizeSpawn((ServerLevelAccessor) e.level(), e.level().getCurrentDifficultyAt(pokemon.blockPosition()), MobSpawnType.NATURAL, null);

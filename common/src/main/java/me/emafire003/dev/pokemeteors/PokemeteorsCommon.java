@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.emafire003.dev.ohmymeteors.config.Config;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import me.emafire003.dev.pokemeteors.util.SpeciesMeteorChance;
 import me.emafire003.dev.pokemeteors.util.SpeciesMeteorConfig;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -24,12 +26,12 @@ public class PokemeteorsCommon {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    //TODO fix meteor embedding
     public static final SpeciesMeteorConfig defaultConfigChance = new SpeciesMeteorConfig(
             List.of(
                     new SpeciesMeteorChance(
                             ResourceLocation.fromNamespaceAndPath(Cobblemon.MODID, "minior").toString(),
-                            1,
-                            5, 2,
+                            1, Config.MAX_SMALL_METEOR_SIZE, 2,
                             MeteorSizeClass.SMALL, "minior",
                             new HashMap<>(Map.of(
                                     "blue-core", MOD_ID+":small/minior/small_blue",
@@ -57,8 +59,6 @@ public class PokemeteorsCommon {
     }
 
     public static void init(Path configPath){
-
-
         //If the file doesn't exists, create the default one
         if(!configPath.resolve("pokemeteors_spawns.json").toFile().exists()){
             generateDefaultFile(configPath);

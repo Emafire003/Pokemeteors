@@ -1,6 +1,7 @@
 package me.emafire003.dev.pokemeteors.fabric;
 
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
+import me.emafire003.dev.pokemeteors.config.ConfigSettings;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.pokemeteors.fabric.entity.PKMFabricEntities;
 import net.fabricmc.api.ModInitializer;
@@ -38,6 +39,10 @@ public final class PokemeteorsFabric implements ModInitializer {
                 PokemeteorsCommon.generateDefaultFile(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
             }
             PokemeteorsCommon.SPECIES_CHANCE_CONFIG = PokemeteorsCommon.readPokemeteorsFile(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
+
+            if(FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")){
+                ConfigSettings.HANDLER.load();
+            }
         });
     }
 }

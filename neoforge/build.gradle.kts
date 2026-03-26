@@ -53,6 +53,9 @@ dependencies {
     implementation("maven.modrinth:structureplacerapi:${property("structureplacerapi_version")}+neo") //StructurePlacerAPI
     implementation("maven.modrinth:particleanimationlib:${property("pal_version")}+1.21-neo") //PAL
     implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert
+
+    //YACL
+    implementation("dev.isxander:yet-another-config-lib:${property("yacl_version")}-neoforge")
 }
 
 tasks {

@@ -16,6 +16,9 @@
     ],
     "client": [
       "me.emafire003.dev.pokemeteors.fabric.PokemeteorsClientFabric"
+    ],
+    "modmenu": [
+      "me.emafire003.dev.pokemeteors.fabric.modmenu.ModMenuIntegration"
     ]
   },
   "mixins": [

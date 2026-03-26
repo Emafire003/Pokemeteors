@@ -45,6 +45,9 @@ dependencies {
     modImplementation("maven.modrinth:structureplacerapi:${property("structureplacerapi_version")}") //StructurePlacerAPI
     modImplementation("maven.modrinth:particleanimationlib:${property("pal_version")}") //PAL
     implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert
+    //YACL
+    modImplementation("dev.isxander:yet-another-config-lib:${property("yacl_version")}-fabric")
+    modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
 
 }
 

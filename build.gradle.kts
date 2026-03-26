@@ -27,6 +27,12 @@ allprojects {
         maven("https://thedarkcolour.github.io/KotlinForForge/")
         maven("https://api.modrinth.com/maven")
         maven("https://jitpack.io")
+        maven("https://maven.isxander.dev/releases") {
+            name = "Xander Maven"
+        }
+        maven("https://maven.terraformersmc.com/"){
+            name = "Terraformers"
+        }
 
     }
 

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SignBlock;
@@ -211,6 +212,16 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                     }
                     return info; //this is actually correct, it is retuning air. And also it actually gets here
                 }
+            } //worldedit can leave the structure void behind soo
+            if(structureBlockInfo.state().getBlock().equals(Blocks.STRUCTURE_VOID)){
+                BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
+                StructureTemplate.StructureBlockInfo info;
+                if (blockEntity != null) {
+                    info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), blockEntity.saveWithId(this.level().registryAccess()));
+                } else {
+                    info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), null);
+                }
+                return info;
             }
             return structureBlockInfo;
         }), BlockTags.ALL_SIGNS);
