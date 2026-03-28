@@ -20,9 +20,29 @@ public class ConfigSettings {
                     .build())
             .build();
 
-    @AutoGen(category = "settings", group = "settings_general")
+    @AutoGen(category = "general", group = "default")
     @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
     @SerialEntry(comment = "Should pokémon spawned with the /pokespawn command be spawned with a meteor if applicable?")
     public boolean overridePokespawnCommand = true;
+
+    @AutoGen(category = "general", group = "chat")
+    @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
+    @SerialEntry(comment = "Should the spawn of a pokemeteor be announced in chat?")
+    public boolean announcePokemeteorSpawn = false;
+
+    @AutoGen(category = "general", group = "chat")
+    @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
+    @SerialEntry(comment = "Should the pokémon inside the meteor be announced as well?")
+    public boolean announcePokemonInsideMeteor = true;
+
+    @AutoGen(category = "general", group = "chat")
+    @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
+    @SerialEntry(comment = "Should the message be displayed in the action bar?")
+    public boolean announceInActionBar = true;
+
+    @AutoGen(category = "general", group = "chat")
+    @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
+    @SerialEntry(comment = "Should the location of the meteor spawn be announced?")
+    public boolean announceLocation = false;
 
 }

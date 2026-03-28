@@ -46,7 +46,7 @@ public abstract class SpawnPokemonEventMixin {
 
 						SpawnablePosition spawnablePosition = spawnAction.getSpawnablePosition();
 
-						CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent(e, spawnAction.getSpawnablePosition()), (spawnEvent -> {return null;}), (spawnEvent) -> {
+						CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent<>(e, spawnAction.getSpawnablePosition()), (spawnEvent -> {return null;}), (spawnEvent) -> {
 							spawnAction.getEntity().emit(e);
 							if (e instanceof Mob) {
 								((Mob) e).finalizeSpawn(spawnablePosition.getWorld(), spawnablePosition.getWorld().getCurrentDifficultyAt(spawnablePosition.getPosition()), MobSpawnType.NATURAL, null);
@@ -57,10 +57,12 @@ public abstract class SpawnPokemonEventMixin {
 
 						//CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent<Entity>(e, spawnablePosition), (spawnEvent -> {}));
 					}
+					cir.cancel();
 				}
+
 			}
 
-			cir.cancel();
+
 		}
 	}
 }

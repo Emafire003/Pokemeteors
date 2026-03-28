@@ -3,12 +3,12 @@
   "id": "pokemeteors",
   "version": "${version}",
   "name": "Pokémeteors",
-  "description": "Spawn pokémon inside OhMyMeteors's meteors",
+  "description": "Spawn space-adjacent (or not!) pokémons inside meteors that fall down to the overworld!",
   "authors": [
     "Emafire003"
   ],
   "license": "GNU LGPL",
-  "icon": "assets/example/icon.png",
+  "icon": "assets/pokemeteors/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

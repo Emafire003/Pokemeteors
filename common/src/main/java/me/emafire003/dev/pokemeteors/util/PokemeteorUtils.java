@@ -1,13 +1,12 @@
 package me.emafire003.dev.pokemeteors.util;
 
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
-import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.ohmymeteors.config.Config;
 import me.emafire003.dev.ohmymeteors.util.MeteorUtils;
 import me.emafire003.dev.pokemeteors.PlatformSpecificStuff;
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
+import me.emafire003.dev.pokemeteors.config.ConfigSettings;
 import me.emafire003.dev.pokemeteors.entity.PokeMeteorEntity;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -50,8 +49,15 @@ public class PokemeteorUtils {
             }
             if(id.getPath().contains("ignoredefault") || id.getPath().contains("ignoredefaults")){
                 //TODO remove this mods' defaults
-                /*METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("big/special/big_meteor_cat"));
-                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("small/small_meteor_2"));*/
+                List<ResourceLocation> copyList = new ArrayList<>(METEOR_STRUCTURES);
+                copyList.forEach( structure -> {
+                    if(structure.getPath().startsWith("small/minior/small_")){
+                        METEOR_STRUCTURES.remove(structure);
+                    }
+                });
+
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("deoxys"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("simple_spawn"));
                 METEOR_STRUCTURES.remove(id);
 
             }
@@ -67,7 +73,6 @@ public class PokemeteorUtils {
      * Gets a meteor object to be spawned in, with a velocity oriented downwards and a spawn position already set up
      * */
     public static PokeMeteorEntity getDownwardsMeteor(Vec3 targetSpawnPos, PokemonEntity spawnedPokemon, ServerLevel world, int min_spawn_d, int max_spawn_d, double spawn_height){
-        //TODO this can't really work since it needs to be on fabric/neoforge in a different way
         PokeMeteorEntity meteor = PlatformSpecificStuff.getSinglePokeMeteor(world, targetSpawnPos, spawnedPokemon);
         Tuple<Vec3, Vec3> pos_vel = MeteorUtils.getDownwardsMeteorPosAndVelocity(targetSpawnPos, world, min_spawn_d, max_spawn_d, spawn_height);
 
@@ -93,32 +98,23 @@ public class PokemeteorUtils {
 
         meteor.setSilenced(silenced);
 
-        String message;
+        if(PlatformSpecificStuff.isModLoaded("yet_another_config_lib_v3")){
+            if(ConfigSettings.HANDLER.instance().announcePokemeteorSpawn){
+                Component msg = Component.translatable("pokemeteors.announce.spawn");
+                if(ConfigSettings.HANDLER.instance().announcePokemonInsideMeteor){
+                    msg = Component.literal(msg.getString()).append(Component.translatable("pokemeteors.announce.pokemon", spawnedPokemon.getName()));
+                }
+                if(ConfigSettings.HANDLER.instance().announceLocation){
+                    String meteorPos = meteor.blockPosition().getX() + " x, " + meteor.blockPosition().getZ() + " z";
+                    msg = Component.literal(msg.getString()).append(Component.translatable("pokemeteors.announce.location", meteorPos));
 
-        /*if(Config.SPAWN_HUGE_METEORS){
-            if(world.getRandom().nextIntBetweenInclusive(0, Config.HUGE_METEOR_CHANCE) == 0){
-                meteor = getDownwardsMeteor(targetSpawnPos, spawnedPokemon, world.getLevel(),
-                        Config.MIN_METEOR_SPAWN_DISTANCE, Config.MAX_METEOR_SPAWN_DISTANCE, Config.METEOR_SPAWN_HEIGHT);
+                }
+                Component finalMsg = Component.empty().append(msg).append(Component.literal("!"));
+                world.players().forEach(player -> player.displayClientMessage(Component.literal(PokemeteorsCommon.PREFIX).append(finalMsg), ConfigSettings.HANDLER.instance().announceInActionBar));
 
-                message = "message.ohmymeteors.meteor_spawned.huge";
-            } else {
-                //world mess is because it needs a final variable btw
-                message = "message.ohmymeteors.meteor_spawned";
-            }
-        } else {
-
-        }*/
-        message = "message.ohmymeteors.meteor_spawned";
-
-//TODO maybe update with the pokemeteors messages
-        if(Config.ANNOUNCE_METEOR_SPAWN && !meteor.isSilenced()){
-            if(Config.ANNOUNCE_LOCATION){
-                String meteorPos = meteor.blockPosition().getX() + " x, " + meteor.blockPosition().getZ() + " z!";
-                world.players().forEach(player -> player.displayClientMessage(Component.literal(OhMyMeteors.PREFIX).append(Component.translatable(message+".localized", meteorPos).withStyle(ChatFormatting.RED)), Config.ACTIONBAR_ANNOUNCEMENTS));
-            }else{
-                world.players().forEach(player -> player.displayClientMessage(Component.literal(OhMyMeteors.PREFIX).append(Component.translatable(message).withStyle(ChatFormatting.RED)), Config.ACTIONBAR_ANNOUNCEMENTS));
             }
         }
+
 
         world.addFreshEntity(meteor);
     }

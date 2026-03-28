@@ -8,7 +8,6 @@ import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -146,9 +145,8 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
     @Override
     public StructurePlacerAPI getPlacer() {
-        BlockPos m_pos_offset = BlockPos.containing(this.getDeltaMovement()).offset(-1, 0, -1);//new BlockPos(-1, -2, -1);
-        StructurePlacerAPI placer =
-                new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+       StructurePlacerAPI placer =
+                new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test")));
 
         boolean aspectFound = false;
         //First check if there is a unique meteor for that specific variant
@@ -160,7 +158,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 }
             });
             if(!chosen_aspect_structure.get().isEmpty()){
-                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(chosen_aspect_structure.get()), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(chosen_aspect_structure.get()), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.tryParse(chosen_aspect_structure.get())));
                 aspectFound = true;
             }
 
@@ -173,7 +171,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             //this means there is a specific meteor file that is being searched
             //If there is only one specific meteor file, spawn that
             if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).contains(":")){
-                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, m_pos_offset);
+                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon))));
             }else{ //otherwise spawn between the unique meteors for that type
                 placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
             }
@@ -203,14 +201,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
                     this.level().addFreshEntity(spawnedPokemon);
 
-                    BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
-                    StructureTemplate.StructureBlockInfo info;
-                    if (blockEntity != null) {
-                        info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), blockEntity.saveWithId(this.level().registryAccess()));
-                    } else {
-                        info = new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), this.level().getBlockState(structureBlockInfo.pos()), null);
-                    }
-                    return info; //this is actually correct, it is retuning air. And also it actually gets here
+                    return new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), Blocks.AIR.defaultBlockState(), null);
                 }
             } //worldedit can leave the structure void behind soo
             if(structureBlockInfo.state().getBlock().equals(Blocks.STRUCTURE_VOID)){

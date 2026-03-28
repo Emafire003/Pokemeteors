@@ -1,7 +1,6 @@
 package me.emafire003.dev.pokemeteors;
 
 import com.cobblemon.mod.common.Cobblemon;
-import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.emafire003.dev.ohmymeteors.config.Config;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -25,6 +23,8 @@ public class PokemeteorsCommon {
     public static final String MOD_ID = "pokemeteors";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+    public static String PREFIX = "§8[§cPoké§fmeteors§8] §r";
 
     //TODO fix meteor embedding
     public static final SpeciesMeteorConfig defaultConfigChance = new SpeciesMeteorConfig(
@@ -64,24 +64,6 @@ public class PokemeteorsCommon {
             generateDefaultFile(configPath);
         }
         SPECIES_CHANCE_CONFIG = readPokemeteorsFile(configPath);
-
-        CobblemonEvents.POKEMON_ENTITY_SPAWN.subscribe(spawnEvent -> {
-            /*PokemonEntity pokemon = spawnEvent.getEntity();
-            SpawnablePosition spawnablePosition = spawnEvent.getSpawnablePosition();
-            Species sp = pokemon.getExposedSpecies();//clefairy
-
-            if(SPECIES_CHANCE_CONFIG.contains(sp)){
-                if(true || spawnablePosition.getWorld().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
-                    if(!pokemon.level().isClientSide()){
-                        PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, false);
-                        pokemon.finalizeSpawn(spawnablePosition.getWorld(), spawnablePosition.getWorld().getCurrentDifficultyAt(spawnablePosition.getPosition()), MobSpawnType.NATURAL, null);
-                    }
-                }
-            }
-            //This is here to prevent a double pokespawn
-            spawnEvent.cancel();*/
-
-        });
     }
 
     /** Generates the defualt file for the list of pokemons that are going to spawn with a meteor

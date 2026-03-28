@@ -1,0 +1,16 @@
+{
+  "yacl3.config.pokemeteors:settings.category.general": "General settings",
+  "yacl3.config.pokemeteors:settings.category.general.group.default": "General settings",
+  "yacl3.config.pokemeteors:settings.category.general.group.chat": "Chat settings",
+  "yacl3.config.pokemeteors:settings.overridePokespawnCommand": "Override /pokespawn command",
+  "yacl3.config.pokemeteors:settings.overridePokespawnCommand.tooltip": "Should pokémon spawned with the /pokespawn command be spawned with a meteor if applicable?",
+  "yacl3.config.pokemeteors:settings.announcePokemeteorSpawn": "Announce Pokémeteor spawn",
+  "yacl3.config.pokemeteors:settings.announcePokemonInsideMeteor": "Announce the Pokémon inside the meteor",
+  "yacl3.config.pokemeteors:settings.announceLocation": "Announce meteor location?",
+  "yacl3.config.pokemeteors:settings.announceInActionBar": "Show the message in Actionbar",
+
+  "pokemeteors.announce.spawn": "A Pokémeteor has spawned",
+  "pokemeteors.announce.pokemon": " with a '%s' inside",
+  "pokemeteors.announce.location": ", around %s"
+
+}

@@ -21,10 +21,7 @@ public class SpawnPokemonCommandMixin {
 
     @WrapOperation(method = "execute", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     public boolean spawnMeteorInstead(ServerLevel instance, Entity arg, Operation<Boolean> original){
-        if(!PlatformSpecificStuff.isModLoaded("yet_another_config_lib_v3")){
-            return original.call(instance, arg);
-        }
-        if(!ConfigSettings.HANDLER.instance().overridePokespawnCommand){
+        if(PlatformSpecificStuff.isModLoaded("yet_another_config_lib_v3") && !ConfigSettings.HANDLER.instance().overridePokespawnCommand){
             return original.call(instance, arg);
         }
         PokemonEntity pokemon = (PokemonEntity) arg;
