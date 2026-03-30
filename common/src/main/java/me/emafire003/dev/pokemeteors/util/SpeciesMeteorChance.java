@@ -1,7 +1,12 @@
 package me.emafire003.dev.pokemeteors.util;
 
 import com.google.gson.annotations.Expose;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -9,6 +14,28 @@ import java.util.List;
 import java.util.Map;
 
 public class SpeciesMeteorChance {
+
+    public static Codec<SpeciesMeteorChance> CODEC = RecordCodecBuilder.create(
+            instance ->
+                    instance.group(Codec.STRING.fieldOf("species")
+                                            .forGetter(SpeciesMeteorChance::species),
+                                    Codec.INT.fieldOf("chance")
+                                            .forGetter(SpeciesMeteorChance::getChance),
+                                    Codec.INT.fieldOf("max_meteor_size")
+                                            .forGetter(SpeciesMeteorChance::getMaxMeteorSize),
+                                    Codec.INT.fieldOf("min_meteor_size")
+                                            .forGetter(SpeciesMeteorChance::getMinMeteorSize),
+                                    MeteorSizeClass.CODEC.fieldOf("meteor_size_class")
+                                            .forGetter(SpeciesMeteorChance::getSizeClass),
+                                    Codec.STRING.fieldOf("unique_meteor")
+                                            .forGetter(SpeciesMeteorChance::getUniqueMeteor),
+                                    Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("aspect_unique_meteor")
+                                            .forGetter(SpeciesMeteorChance::getAspectUniqueMeteor)
+                            )
+                            .apply(instance, SpeciesMeteorChance::new));
+
+    public static StreamCodec<ByteBuf, SpeciesMeteorChance> PACKET_CODEC = ByteBufCodecs.fromCodec(CODEC);
+
     /// The pokemon's species formatted as an identifier so "cobblemon:minior" for example
     @Expose
     String species;
@@ -86,6 +113,17 @@ public class SpeciesMeteorChance {
         this.unique_meteor = unique_meteor;
     }
 
+    //used by the codec
+    public SpeciesMeteorChance(String species, int chance, int max_meteor_size, int min_meteor_size, MeteorSizeClass meteor_size_class, String unique_meteor, Map<String, String> aspect_unique_meteor) {
+        this.species = species;
+        this.chance = chance;
+        this.max_meteor_size = max_meteor_size;
+        this.min_meteor_size = min_meteor_size;
+        this.meteor_size_class = meteor_size_class;
+        this.unique_meteor = unique_meteor;
+        this.aspect_unique_meteor = new HashMap<>(aspect_unique_meteor);
+    }
+
     public SpeciesMeteorChance(String species, int chance, int max_meteor_size, int min_meteor_size, MeteorSizeClass meteor_size_class, String unique_meteor, HashMap<String, String> aspect_unique_meteor) {
         this.species = species;
         this.chance = chance;
@@ -96,7 +134,7 @@ public class SpeciesMeteorChance {
         this.aspect_unique_meteor = aspect_unique_meteor;
     }
 
-    public String getSpecialMeteor() {
+    public String getUniqueMeteor() {
         return unique_meteor;
     }
 
@@ -113,6 +151,10 @@ public class SpeciesMeteorChance {
 
     public ResourceLocation getSpecies() {
         return ResourceLocation.tryParse(species);
+    }
+
+    public String species(){
+        return species;
     }
 
     public void setSpecies(String species) {

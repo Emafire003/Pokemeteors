@@ -1,0 +1,40 @@
+{
+  "speciesMeteorChances": [
+    {
+      "species": "cobblemon:minior",
+      "chance": 1,
+      "max_meteor_size": 5,
+      "min_meteor_size": 2,
+      "meteor_size_class": "small",
+      "unique_meteor": "minior",
+      "aspect_unique_meteor": {
+        "orange-core": "pokemeteors:small/minior/small_orange",
+        "red-core": "pokemeteors:small/minior/small_red",
+        "yellow-core": "pokemeteors:small/minior/small_yellow",
+        "violet-core": "pokemeteors:small/minior/small_violet",
+        "green-core": "pokemeteors:small/minior/small_green",
+        "indigo-core": "pokemeteors:small/minior/small_indigo",
+        "blue-core": "pokemeteors:small/minior/small_blue"
+      }
+    },
+    {
+      "species": "cobblemon:clefable",
+      "chance": 1,
+      "max_meteor_size": 20,
+      "min_meteor_size": 20,
+      "meteor_size_class": "medium",
+      "unique_meteor": "",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:deoxys",
+      "chance": 1,
+      "max_meteor_size": 12,
+      "min_meteor_size": 12,
+      "meteor_size_class": "big",
+      "unique_meteor": "pokemeteors:deoxys",
+      "aspect_unique_meteor": {}
+    }
+  ],
+  "version_do_not_touch": 1
+}

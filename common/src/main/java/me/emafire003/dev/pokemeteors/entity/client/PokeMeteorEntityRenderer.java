@@ -47,6 +47,6 @@ public class PokeMeteorEntityRenderer extends EntityRenderer<PokeMeteorEntity> {
     @Override
     public @NotNull ResourceLocation getTextureLocation(PokeMeteorEntity entity) {
         //TODO change texture                        (vvv and modid vvv) (maybe, i don't know tbf)
-        return ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "textures/block/meteoric_rock");
+        return ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "textures/block/meteoric_rock.png");
     }
 }

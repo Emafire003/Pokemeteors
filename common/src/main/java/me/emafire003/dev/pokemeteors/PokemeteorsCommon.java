@@ -26,7 +26,7 @@ public class PokemeteorsCommon {
 
     public static String PREFIX = "§8[§cPoké§fmeteors§8] §r";
 
-    //TODO fix meteor embedding
+    @Deprecated //the default file will be loaded insetad.
     public static final SpeciesMeteorConfig defaultConfigChance = new SpeciesMeteorConfig(
             List.of(
                     new SpeciesMeteorChance(
@@ -58,16 +58,13 @@ public class PokemeteorsCommon {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
+    @Deprecated
     public static void init(Path configPath){
-        //If the file doesn't exists, create the default one
-        if(!configPath.resolve("pokemeteors_spawns.json").toFile().exists()){
-            generateDefaultFile(configPath);
-        }
-        SPECIES_CHANCE_CONFIG = readPokemeteorsFile(configPath);
     }
 
     /** Generates the defualt file for the list of pokemons that are going to spawn with a meteor
      * @param path the starting path, usually the config directory.*/
+    @Deprecated
     public static void generateDefaultFile(Path path){
         try (FileWriter fileWriter = new FileWriter(String.valueOf(path.resolve("pokemeteors_spawns.json").toFile()), StandardCharsets.UTF_8);
              BufferedWriter bufferedWriter = new BufferedWriter(fileWriter, 4096)) {
@@ -88,6 +85,7 @@ public class PokemeteorsCommon {
     }
 
     /**Reads the pokemons that should spawn with meteors from the config file*/
+    @Deprecated
     public static SpeciesMeteorConfig readPokemeteorsFile(Path path){
         try (FileReader fileReader = new FileReader(String.valueOf(path.resolve("pokemeteors_spawns.json").toFile()), StandardCharsets.UTF_8);
              BufferedReader bufferedReader = new BufferedReader(fileReader, 4096)) {

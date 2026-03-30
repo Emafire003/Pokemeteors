@@ -3,6 +3,8 @@ package me.emafire003.dev.pokemeteors.util;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.google.gson.annotations.Expose;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
@@ -17,8 +19,17 @@ public class SpeciesMeteorConfig {
     @Expose
     List<SpeciesMeteorChance> speciesMeteorChances = new ArrayList<>();
     @Expose
-    private final int version_do_not_touch = 1;
+    private int version_do_not_touch = 1;
     HashMap<String, Integer> cache = new HashMap<>();
+
+    public static Codec<SpeciesMeteorConfig> CODEC = RecordCodecBuilder.create(
+            instance ->
+                    instance.group(Codec.INT.fieldOf("version_do_not_touch")
+                                            .forGetter(SpeciesMeteorConfig::getVersion_do_not_touch),
+                                    Codec.list(SpeciesMeteorChance.CODEC).fieldOf("speciesMeteorChances")
+                                            .forGetter(SpeciesMeteorConfig::getSpeciesMeteorChances)
+                            )
+                            .apply(instance, SpeciesMeteorConfig::new));
 
     public SpeciesMeteorConfig(SpeciesMeteorChance speciesMeteorChance){
         this.speciesMeteorChances.add(speciesMeteorChance);
@@ -30,9 +41,23 @@ public class SpeciesMeteorConfig {
         cache = new HashMap<>();
     }
 
+    //used by codec
+    public SpeciesMeteorConfig(int version, List<SpeciesMeteorChance> speciesMeteorChances) {
+        this.version_do_not_touch = version;
+        this.speciesMeteorChances = speciesMeteorChances;
+    }
+
     /** Checks if a given speciesMeteorChance is contained in this "map"*/
     public boolean contains(SpeciesMeteorChance speciesMeteorChance){
         return this.speciesMeteorChances.contains(speciesMeteorChance);
+    }
+
+    public List<SpeciesMeteorChance> getSpeciesMeteorChances() {
+        return speciesMeteorChances;
+    }
+
+    public int getVersion_do_not_touch() {
+        return version_do_not_touch;
     }
 
     /**Checks if a given pokemon species is contained in this "map"*/
@@ -174,12 +199,12 @@ public class SpeciesMeteorConfig {
 
     public String getSpecialMeteor(String pokemon){
         if(cache.containsKey(pokemon)){
-            return this.speciesMeteorChances.get(cache.get(pokemon)).getSpecialMeteor();
+            return this.speciesMeteorChances.get(cache.get(pokemon)).getUniqueMeteor();
         }
         for(int i = 0; i<this.speciesMeteorChances.size(); i++){
             if(this.speciesMeteorChances.get(i).species.equals(pokemon)){
                 cache.put(pokemon, i);
-                return this.speciesMeteorChances.get(i).getSpecialMeteor();
+                return this.speciesMeteorChances.get(i).getUniqueMeteor();
             }
         }
         return "";

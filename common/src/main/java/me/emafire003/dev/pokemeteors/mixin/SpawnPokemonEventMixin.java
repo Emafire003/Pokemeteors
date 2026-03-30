@@ -54,8 +54,6 @@ public abstract class SpawnPokemonEventMixin {
 							spawnablePosition.getWorld().addFreshEntity(e);
 							return Unit.INSTANCE;
 						});
-
-						//CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent<Entity>(e, spawnablePosition), (spawnEvent -> {}));
 					}
 					cir.cancel();
 				}

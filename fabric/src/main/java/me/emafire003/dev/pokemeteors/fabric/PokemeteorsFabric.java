@@ -6,7 +6,9 @@ import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.pokemeteors.fabric.entity.PKMFabricEntities;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.packs.PackType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +27,7 @@ public final class PokemeteorsFabric implements ModInitializer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        PokemeteorsCommon.init(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
+        //PokemeteorsCommon.init(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
         PKMFabricEntities.registerEntities();
 
         //TODO do the same for neoforge
@@ -33,16 +35,13 @@ public final class PokemeteorsFabric implements ModInitializer {
             //yes reloads for each dimension
             //TODO maybe just pick one? Datapacks aren't per-dimension right? But multiverse and stuff exists so idk
             minecraftServer.getAllLevels().forEach(PokemeteorUtils::reInitStructures);
-            //TODO swithc to datapack file
-            PokemeteorsCommon.LOGGER.info("Exists? " + FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID).resolve("pokemeteors_spawns.json").toFile().exists());
-            if(!FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID).resolve("pokemeteors_spawns.json").toFile().exists()){
-                PokemeteorsCommon.generateDefaultFile(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
-            }
-            PokemeteorsCommon.SPECIES_CHANCE_CONFIG = PokemeteorsCommon.readPokemeteorsFile(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
 
             if(FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")){
                 ConfigSettings.HANDLER.load();
             }
         });
+
+        // Datapack reload listener
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new PokeResourceManagerFabric());
     }
 }

@@ -146,9 +146,9 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     @Override
     public StructurePlacerAPI getPlacer() {
        StructurePlacerAPI placer =
-                new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "pokemeteors/medium_test")));
+                new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "error"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "error")));
 
-        boolean aspectFound = false;
+       boolean aspectFound = false;
         //First check if there is a unique meteor for that specific variant
         if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getAspectUniqueMeteor(this.spawnedPokemon) != null){
             AtomicReference<String> chosen_aspect_structure = new AtomicReference<>("");
@@ -177,6 +177,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             }
         }else if(!aspectFound){
             placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon));
+
         }
 
         placer.actionOnBlocksPlacedByStructure(((structureBlockInfo, serverLevelAccessor) -> {
