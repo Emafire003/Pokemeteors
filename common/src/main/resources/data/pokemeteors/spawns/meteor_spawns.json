@@ -19,11 +19,47 @@
     },
     {
       "species": "cobblemon:clefable",
-      "chance": 1,
-      "max_meteor_size": 20,
-      "min_meteor_size": 20,
+      "chance": 15,
+      "max_meteor_size": 10,
+      "min_meteor_size": 5,
       "meteor_size_class": "medium",
       "unique_meteor": "",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:clefairy",
+      "chance": 10,
+      "max_meteor_size": 7,
+      "min_meteor_size": 3,
+      "meteor_size_class": "small",
+      "unique_meteor": "",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:cleffa",
+      "chance": 15,
+      "max_meteor_size": 5,
+      "min_meteor_size": 2,
+      "meteor_size_class": "small",
+      "unique_meteor": "",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:lunatone",
+      "chance": 3,
+      "max_meteor_size": 5,
+      "min_meteor_size": 8,
+      "meteor_size_class": "medium",
+      "unique_meteor": "lunmeteor",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:solrock",
+      "chance": 3,
+      "max_meteor_size": 5,
+      "min_meteor_size": 8,
+      "meteor_size_class": "medium",
+      "unique_meteor": "solmeteor",
       "aspect_unique_meteor": {}
     },
     {
@@ -33,6 +69,24 @@
       "min_meteor_size": 12,
       "meteor_size_class": "big",
       "unique_meteor": "pokemeteors:deoxys",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:solgaleo",
+      "chance": 1,
+      "max_meteor_size": 30,
+      "min_meteor_size": 30,
+      "meteor_size_class": "big",
+      "unique_meteor": "pokemeteors:simple_spawn",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:lunala",
+      "chance": 1,
+      "max_meteor_size": 30,
+      "min_meteor_size": 30,
+      "meteor_size_class": "big",
+      "unique_meteor": "pokemeteors:simple_spawn",
       "aspect_unique_meteor": {}
     }
   ],
