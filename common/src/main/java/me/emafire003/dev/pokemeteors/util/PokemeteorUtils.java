@@ -85,18 +85,17 @@ public class PokemeteorUtils {
         return meteor;
     }
     
-    
     /**Spawns a meteor around a random alive online player
      *
      * @param world The world in which the meteors are gonna be spawned in
      * @param targetSpawnPos The position where the meteor will impact and spawn the pokemon
      * @param spawnedPokemon The pokemon that will spawn inside/along the meteor
-     * @param silenced Weather or not the meteor should be announced in chat*/
-    public static void spawnMeteor(ServerLevel world, Vec3 targetSpawnPos, PokemonEntity spawnedPokemon, boolean silenced){
+     * @param simpleSpawn Weather or not the meteor should spawn a pokémon without a structure*/
+    public static void spawnMeteor(ServerLevel world, Vec3 targetSpawnPos, PokemonEntity spawnedPokemon, boolean simpleSpawn){
         PokeMeteorEntity meteor = getDownwardsMeteor(targetSpawnPos, spawnedPokemon, world.getLevel(),
                 Config.MIN_METEOR_SPAWN_DISTANCE, Config.MAX_METEOR_SPAWN_DISTANCE, Config.METEOR_SPAWN_HEIGHT);
 
-        meteor.setSilenced(silenced);
+        meteor.setSimpleSpawn(simpleSpawn);
 
         if(PlatformSpecificStuff.isModLoaded("yet_another_config_lib_v3")){
             if(ConfigSettings.HANDLER.instance().announcePokemeteorSpawn){
@@ -114,8 +113,6 @@ public class PokemeteorUtils {
 
             }
         }
-
-
         world.addFreshEntity(meteor);
     }
 }

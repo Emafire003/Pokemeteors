@@ -8,6 +8,7 @@
   "yacl3.config.pokemeteors:settings.announcePokemonInsideMeteor": "Announce the Pokémon inside the meteor",
   "yacl3.config.pokemeteors:settings.announceLocation": "Announce meteor location?",
   "yacl3.config.pokemeteors:settings.announceInActionBar": "Show the message in Actionbar",
+  "yacl3.config.pokemeteors:settings.onlySimpleSpawns": "Only spawn pokémon without structures",
 
   "pokemeteors.announce.spawn": "A Pokémeteor has spawned",
   "pokemeteors.announce.pokemon": " with a '%s' inside",

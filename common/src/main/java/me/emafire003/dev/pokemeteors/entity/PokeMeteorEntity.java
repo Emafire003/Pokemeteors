@@ -8,11 +8,15 @@ import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
@@ -23,6 +27,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -36,6 +41,8 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     /// The position at which the meteor will end up
     protected Vec3 targetPos = Vec3.ZERO;
     protected PokemonEntity spawnedPokemon;
+    /// If the meteor is a simple spawn meteor no structure will be generated, the pokemon will be the only thing spawning
+    protected boolean simpleSpawn = false;
 
     public PokeMeteorEntity(EntityType<? extends AbstractHurtingProjectile> entityType, Level world) {
         super(entityType, world);
@@ -144,6 +151,26 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     }
 
     @Override
+    public void detonateWithStructure() {
+        if(isSimpleSpawn()){
+            this.detonateSimple();
+        }
+    }
+
+    @Override
+    public void detonateSimple() {
+        super.detonateSimple();
+        if(isSimpleSpawn()){
+            BlockPos spawnPos = this.blockPosition();
+            while(level().getBlockState(spawnPos).isAir()){
+                spawnPos = spawnPos.below();
+            }
+            this.spawnPokemon(spawnPos.above());
+        }
+
+    }
+
+    @Override
     public StructurePlacerAPI getPlacer() {
        StructurePlacerAPI placer =
                 new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "error"), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.fromNamespaceAndPath(OhMyMeteors.MOD_ID, "error")));
@@ -167,18 +194,19 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         //then checks if there is a specific meteor for the pokemon species
         //If the aspectFound is true it means this should not run. It is here because if it isn't found but is declared,
         // there might be a pool of unique meteors to spawn
-        if(!aspectFound && PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon) != null && !PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).isEmpty()){
+        if(!aspectFound && PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getUniqueMeteor(this.spawnedPokemon) != null && !PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getUniqueMeteor(this.spawnedPokemon).isEmpty()){
             //this means there is a specific meteor file that is being searched
             //If there is only one specific meteor file, spawn that
-            if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon).contains(":")){
-                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon))));
+            if(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getUniqueMeteor(this.spawnedPokemon).contains(":")){
+                placer = new StructurePlacerAPI((WorldGenLevel) this.level(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getUniqueMeteor(this.spawnedPokemon)), this.blockPosition(), Mirror.NONE, Rotation.NONE, false, 1f, getOffset(getSizeClass(), ResourceLocation.tryParse(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getUniqueMeteor(this.spawnedPokemon))));
             }else{ //otherwise spawn between the unique meteors for that type
-                placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSpecialMeteor(this.spawnedPokemon));
+                placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon), PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getUniqueMeteor(this.spawnedPokemon));
             }
         }else if(!aspectFound){
             placer = getPlacer(PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getSizeClass(this.spawnedPokemon));
 
         }
+
 
         placer.actionOnBlocksPlacedByStructure(((structureBlockInfo, serverLevelAccessor) -> {
             if(structureBlockInfo.state().getBlock() instanceof SignBlock && structureBlockInfo.nbt() != null){
@@ -198,10 +226,7 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
                 //TODO workout how to spawn multiple pokemon
                 if(found.get()){
-                    spawnedPokemon.setPos(structureBlockInfo.pos().getBottomCenter());
-
-                    this.level().addFreshEntity(spawnedPokemon);
-
+                    this.spawnPokemon(structureBlockInfo.pos());
                     return new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), Blocks.AIR.defaultBlockState(), null);
                 }
             } //worldedit can leave the structure void behind soo
@@ -221,4 +246,44 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         return placer;
         //super.getPlacer();
     }
+
+    /**Spawns a pokemon with some ticks of resistance to damage and fire as well as not inside some blocks*/
+    protected void spawnPokemon(BlockPos spawnPos){
+
+        AtomicBoolean suffocates = new AtomicBoolean(true);
+        while(suffocates.get()){
+            spawnPos = spawnPos.above();
+            spawnedPokemon.setPos(spawnPos.getBottomCenter());
+
+            EntityDimensions entityDimensions = spawnedPokemon.getDimensions(spawnedPokemon.getPose());
+            AABB box = entityDimensions.makeBoundingBox(spawnPos.getBottomCenter());
+
+            suffocates.set(false);
+            this.level().getBlockStates(box).forEach( state -> {
+                if(!state.isAir()){
+                    suffocates.set(true);
+                }
+            });
+        }
+
+
+        this.level().addFreshEntity(spawnedPokemon);
+        spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 30, 255, true, false)));
+        //5 seconds of fire resistance to avoid fire damage
+        spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*5, 1, true, false)));
+
+    }
+
+
+    /**If the meteor is a simple spawn meteor no structure will be generated, the pokemon will be the only thing spawning
+     */
+    public boolean isSimpleSpawn() {
+        return simpleSpawn;
+    }
+    /**If the meteor is a simple spawn meteor no structure will be generated, the pokemon will be the only thing spawning
+     */
+    public void setSimpleSpawn(boolean simpleSpawn) {
+        this.simpleSpawn = simpleSpawn;
+    }
+
 }

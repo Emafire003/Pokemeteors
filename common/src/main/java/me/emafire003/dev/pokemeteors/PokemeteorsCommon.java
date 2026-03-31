@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO find a way to overide default datapack
 public class PokemeteorsCommon {
 
     public static final String MOD_ID = "pokemeteors";
@@ -56,10 +57,6 @@ public class PokemeteorsCommon {
 
     public static ResourceLocation getIdentifier(String path){
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
-    }
-
-    @Deprecated
-    public static void init(Path configPath){
     }
 
     /** Generates the defualt file for the list of pokemons that are going to spawn with a meteor

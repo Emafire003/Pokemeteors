@@ -9,6 +9,7 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.llamalad7.mixinextras.sugar.Local;
 import kotlin.Unit;
+import me.emafire003.dev.pokemeteors.config.ConfigSettings;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -39,19 +40,26 @@ public abstract class SpawnPokemonEventMixin {
 			if(SPECIES_CHANCE_CONFIG.contains(sp) && e.level().canSeeSky(e.blockPosition())){
 				if(e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
 					if(!pokemon.level().isClientSide()){
-						PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, false);
+						if(SPECIES_CHANCE_CONFIG.getUniqueMeteor(pokemon).contains("simple_spawn") || ConfigSettings.HANDLER.instance().onlySimpleSpawns){
+							PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, true);
+						}else {
+							PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, false);
+
+						}
 						pokemon.finalizeSpawn((ServerLevelAccessor) e.level(), e.level().getCurrentDifficultyAt(pokemon.blockPosition()), MobSpawnType.NATURAL, null);
 
+						@SuppressWarnings("rawtypes")
 						SingleEntitySpawnAction spawnAction = ((SingleEntitySpawnAction) (Object) this);
 
 						SpawnablePosition spawnablePosition = spawnAction.getSpawnablePosition();
 
 						CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent<>(e, spawnAction.getSpawnablePosition()), (spawnEvent -> {return null;}), (spawnEvent) -> {
-							spawnAction.getEntity().emit(e);
+                            //noinspection unchecked
+                            spawnAction.getEntity().emit(e);
 							if (e instanceof Mob) {
 								((Mob) e).finalizeSpawn(spawnablePosition.getWorld(), spawnablePosition.getWorld().getCurrentDifficultyAt(spawnablePosition.getPosition()), MobSpawnType.NATURAL, null);
 							}
-							spawnablePosition.getWorld().addFreshEntity(e);
+							// it would duplicate the spawned pokemon spawnablePosition.getWorld().addFreshEntity(e);
 							return Unit.INSTANCE;
 						});
 					}

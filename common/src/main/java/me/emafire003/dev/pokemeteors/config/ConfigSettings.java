@@ -25,6 +25,11 @@ public class ConfigSettings {
     @SerialEntry(comment = "Should pokémon spawned with the /pokespawn command be spawned with a meteor if applicable?")
     public boolean overridePokespawnCommand = true;
 
+    @AutoGen(category = "general", group = "default")
+    @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
+    @SerialEntry(comment = "Makes all pokémeteors just spawn the pokémon without the explosion")
+    public boolean onlySimpleSpawns = false;
+
     @AutoGen(category = "general", group = "chat")
     @Boolean(formatter = Boolean.Formatter.YES_NO, colored = true)
     @SerialEntry(comment = "Should the spawn of a pokemeteor be announced in chat?")

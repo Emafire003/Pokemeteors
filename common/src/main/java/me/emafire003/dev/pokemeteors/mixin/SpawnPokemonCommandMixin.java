@@ -30,7 +30,11 @@ public class SpawnPokemonCommandMixin {
         if(SPECIES_CHANCE_CONFIG.contains(pokemon.getExposedSpecies()) &&
                 instance.getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(pokemon.getExposedSpecies())) == 0){
             if(!instance.isClientSide()){
-                PokemeteorUtils.spawnMeteor(instance, arg.position(), pokemon, false);
+                if(SPECIES_CHANCE_CONFIG.getUniqueMeteor(pokemon).contains("simple_spawn") || ConfigSettings.HANDLER.instance().onlySimpleSpawns){
+                    PokemeteorUtils.spawnMeteor(instance, arg.position(), pokemon, true);
+                }else{
+                    PokemeteorUtils.spawnMeteor(instance, arg.position(), pokemon, false);
+                }
                 return true;
             }
         }

@@ -197,7 +197,7 @@ public class SpeciesMeteorConfig {
         return getSizeClass(pokemon.getExposedSpecies());
     }
 
-    public String getSpecialMeteor(String pokemon){
+    public String getUniqueMeteor(String pokemon){
         if(cache.containsKey(pokemon)){
             return this.speciesMeteorChances.get(cache.get(pokemon)).getUniqueMeteor();
         }
@@ -210,19 +210,19 @@ public class SpeciesMeteorConfig {
         return "";
     }
 
-    public String getSpecialMeteor(ResourceLocation pokemon){
-        return getSpecialMeteor(pokemon.toString());
+    public String getUniqueMeteor(ResourceLocation pokemon){
+        return getUniqueMeteor(pokemon.toString());
     }
 
-    public String getSpecialMeteor(Species pokemon){
-        return getSpecialMeteor(pokemon.getResourceIdentifier());
+    public String getUniqueMeteor(Species pokemon){
+        return getUniqueMeteor(pokemon.getResourceIdentifier());
     }
 
-    public String getSpecialMeteor(PokemonEntity pokemon){
+    public String getUniqueMeteor(PokemonEntity pokemon){
         if(pokemon == null){
             return "";
         }
-        return getSpecialMeteor(pokemon.getExposedSpecies());
+        return getUniqueMeteor(pokemon.getExposedSpecies());
     }
 
     @Nullable
