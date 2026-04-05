@@ -8,6 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 public class PokeResourceManagerFabric extends PokeResourceManagerListener implements IdentifiableResourceReloadListener {
     @Override
     public ResourceLocation getFabricId() {
-        return ResourceLocation.fromNamespaceAndPath(PokemeteorsCommon.MOD_ID, PokeResourceManagerListener.DIR);
+        return ResourceLocation.fromNamespaceAndPath(PokemeteorsCommon.MOD_ID, PokeResourceManagerListener.RESOURCE_PATH);
     }
 }

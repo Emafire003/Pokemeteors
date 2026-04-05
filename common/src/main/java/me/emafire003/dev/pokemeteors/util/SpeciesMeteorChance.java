@@ -172,4 +172,17 @@ public class SpeciesMeteorChance {
     public void setChance(int chance) {
         this.chance = chance;
     }
+
+    @Override
+    public String toString() {
+        return "SpeciesMeteorChance{" +
+                "species='" + species + '\'' +
+                ", chance=" + chance +
+                ", max_meteor_size=" + max_meteor_size +
+                ", min_meteor_size=" + min_meteor_size +
+                ", meteor_size_class=" + meteor_size_class +
+                ", unique_meteor='" + unique_meteor + '\'' +
+                ", aspect_unique_meteor=" + aspect_unique_meteor +
+                '}';
+    }
 }

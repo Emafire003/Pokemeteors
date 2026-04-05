@@ -154,6 +154,8 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     public void detonateWithStructure() {
         if(isSimpleSpawn()){
             this.detonateSimple();
+        }else{
+            super.detonateWithStructure();
         }
     }
 
@@ -166,6 +168,9 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                 spawnPos = spawnPos.below();
             }
             this.spawnPokemon(spawnPos.above());
+            if(level().getBlockState(spawnPos.above()).getBlock().equals(Blocks.FIRE)){
+                level().setBlockAndUpdate(spawnPos.above(), Blocks.AIR.defaultBlockState());
+            }
         }
 
     }

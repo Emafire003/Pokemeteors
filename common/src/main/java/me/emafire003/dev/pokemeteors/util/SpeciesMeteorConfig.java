@@ -17,6 +17,8 @@ import java.util.Map;
 //TODO move to a datapack loader thingy
 public class SpeciesMeteorConfig {
     @Expose
+    private List<String> override_for = new ArrayList<>();
+    @Expose
     List<SpeciesMeteorChance> speciesMeteorChances = new ArrayList<>();
     @Expose
     private int version_do_not_touch = 1;
@@ -26,6 +28,8 @@ public class SpeciesMeteorConfig {
             instance ->
                     instance.group(Codec.INT.fieldOf("version_do_not_touch")
                                             .forGetter(SpeciesMeteorConfig::getVersion_do_not_touch),
+                                    Codec.list(Codec.STRING).fieldOf("override_for")
+                                            .forGetter(SpeciesMeteorConfig::getOverrideFor),
                                     Codec.list(SpeciesMeteorChance.CODEC).fieldOf("speciesMeteorChances")
                                             .forGetter(SpeciesMeteorConfig::getSpeciesMeteorChances)
                             )
@@ -42,9 +46,10 @@ public class SpeciesMeteorConfig {
     }
 
     //used by codec
-    public SpeciesMeteorConfig(int version, List<SpeciesMeteorChance> speciesMeteorChances) {
+    public SpeciesMeteorConfig(int version, List<String> override_for, List<SpeciesMeteorChance> speciesMeteorChances) {
         this.version_do_not_touch = version;
         this.speciesMeteorChances = speciesMeteorChances;
+        this.override_for = override_for;
     }
 
     /** Checks if a given speciesMeteorChance is contained in this "map"*/
@@ -54,6 +59,10 @@ public class SpeciesMeteorConfig {
 
     public List<SpeciesMeteorChance> getSpeciesMeteorChances() {
         return speciesMeteorChances;
+    }
+
+    public void setSpeciesMeteorChances(List<SpeciesMeteorChance> newChances) {
+        this.speciesMeteorChances = newChances;
     }
 
     public int getVersion_do_not_touch() {
@@ -254,5 +263,40 @@ public class SpeciesMeteorConfig {
         return getAspectUniqueMeteor(pokemon.getExposedSpecies());
     }
 
+    public List<String> getOverrideFor() {
+        return override_for;
+    }
 
+    public void setOverrideDefaultFor(List<String> override_default_for) {
+        this.override_for = override_default_for;
+    }
+
+    @Nullable
+    public SpeciesMeteorChance getSpeciesChanceById(String id){
+        if(cache.containsKey(id)){
+            return this.speciesMeteorChances.get(cache.get(id));
+        }
+        for(int i = 0; i<this.speciesMeteorChances.size(); i++){
+            if(this.speciesMeteorChances.get(i).species.equals(id)){
+                cache.put(id, i);
+                return this.speciesMeteorChances.get(i);
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public SpeciesMeteorChance getSpeciesChanceById(ResourceLocation id){
+        return getSpeciesChanceById(id.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "SpeciesMeteorConfig{" +
+                "override_for=" + override_for +
+                ", speciesMeteorChances=" + speciesMeteorChances +
+                ", version_do_not_touch=" + version_do_not_touch +
+                ", cache=" + cache +
+                '}';
+    }
 }
