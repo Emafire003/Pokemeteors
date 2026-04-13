@@ -74,8 +74,8 @@
     {
       "species": "cobblemon:solgaleo",
       "chance": 1,
-      "max_meteor_size": 30,
-      "min_meteor_size": 30,
+      "max_meteor_size": 27,
+      "min_meteor_size": 27,
       "meteor_size_class": "big",
       "unique_meteor": "pokemeteors:simple_spawn",
       "aspect_unique_meteor": {}
@@ -83,10 +83,19 @@
     {
       "species": "cobblemon:lunala",
       "chance": 1,
-      "max_meteor_size": 30,
-      "min_meteor_size": 30,
+      "max_meteor_size": 27,
+      "min_meteor_size": 27,
       "meteor_size_class": "big",
       "unique_meteor": "pokemeteors:simple_spawn",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:kyurem",
+      "chance": 1,
+      "max_meteor_size": 40,
+      "min_meteor_size": 40,
+      "meteor_size_class": "huge",
+      "unique_meteor": "pokemeteors:huge/kyurem_huge",
       "aspect_unique_meteor": {}
     }
   ],

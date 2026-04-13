@@ -37,7 +37,7 @@ side = "BOTH"
 [[dependencies.pokemeteors]]
 modId = "ohmymeteors"
 mandatory = true
-versionRange = "[1.3.0,)"
+versionRange = "[1.4.0,)"
 ordering = "AFTER"
 side = "BOTH"
 
