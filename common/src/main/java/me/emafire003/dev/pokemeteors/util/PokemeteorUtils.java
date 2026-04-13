@@ -47,15 +47,25 @@ public class PokemeteorUtils {
                 }
 
             }
-            if(id.getPath().contains("ignoredefault") || id.getPath().contains("ignoredefaults")){
-                //TODO remove this mods' defaults
+            if(id.getPath().contains("ignoredefault")){
+
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("big/moonstone_big"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("huge/kyurem_huge"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/sun_medium"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/solmeteor"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/moon_medium"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/lunmeteor"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/dusk_medium"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("medium/dawn_medium"));
+                //Miniors
                 List<ResourceLocation> copyList = new ArrayList<>(METEOR_STRUCTURES);
                 copyList.forEach( structure -> {
                     if(structure.getPath().startsWith("small/minior/small_")){
                         METEOR_STRUCTURES.remove(structure);
                     }
                 });
-
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("small/tublestone_small"));
+                METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("small/moon_small"));
                 METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("deoxys"));
                 METEOR_STRUCTURES.remove(PokemeteorsCommon.getIdentifier("simple_spawn"));
                 METEOR_STRUCTURES.remove(id);

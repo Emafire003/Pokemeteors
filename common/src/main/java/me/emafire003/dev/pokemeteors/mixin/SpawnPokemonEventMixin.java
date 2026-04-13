@@ -28,7 +28,6 @@ import static me.emafire003.dev.pokemeteors.PokemeteorsCommon.SPECIES_CHANCE_CON
 @Mixin(SingleEntitySpawnAction.class)
 public abstract class SpawnPokemonEventMixin {
 
-	//TODO actually o dont't know if it spawns the pokemon
 	@Inject(method = "run()Lcom/cobblemon/mod/common/api/spawning/detail/EntitySpawnResult;", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/world/entity/Entity;setPos(Lnet/minecraft/world/phys/Vec3;)V"), cancellable = true)
 	private void spawnMeteorInstead(CallbackInfoReturnable<EntitySpawnResult> cir, @Local(name = "e") Entity e){
@@ -36,7 +35,6 @@ public abstract class SpawnPokemonEventMixin {
             //SpawnablePosition spawnablePosition = spawnEvent.getSpawnablePosition();
 			Species sp = pokemon.getExposedSpecies();
 
-			//TODO test out. maybe just go back to the event thing?
 			if(SPECIES_CHANCE_CONFIG.contains(sp) && e.level().canSeeSky(e.blockPosition())){
 				if(e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
 					if(!pokemon.level().isClientSide()){
