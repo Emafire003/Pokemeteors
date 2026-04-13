@@ -7,7 +7,7 @@
   "authors": [
     "Emafire003"
   ],
-  "license": "GNU LGPL",
+  "license": "GNU GPL3",
   "icon": "assets/pokemeteors/icon.png",
   "environment": "*",
   "entrypoints": {
