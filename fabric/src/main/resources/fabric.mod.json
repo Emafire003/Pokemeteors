@@ -3,7 +3,7 @@
   "id": "pokemeteors",
   "version": "${version}",
   "name": "Pokémeteors",
-  "description": "Spawn space-adjacent (or not!) pokémons inside meteors that fall down to the overworld!",
+  "description": "Spawn space-adjacent (or not!) pokémons inside OhMyMeteor's meteors that fall down to the overworld!",
   "authors": [
     "Emafire003"
   ],

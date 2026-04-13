@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO find a way to overide default datapack
 public class PokemeteorsCommon {
 
     public static final String MOD_ID = "pokemeteors";

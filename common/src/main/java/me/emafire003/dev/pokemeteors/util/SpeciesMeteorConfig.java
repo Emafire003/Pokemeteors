@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO move to a datapack loader thingy
 public class SpeciesMeteorConfig {
     @Expose
     private List<String> override_for = new ArrayList<>();

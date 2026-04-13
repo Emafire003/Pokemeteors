@@ -9,9 +9,9 @@ version = "${version}"
 displayName = "Pokémeteors"
 authors = "Emafire003"
 description = '''
-Spawn pokémon inside OhMyMeteors's meteors
+Spawn space-adjacent (or not!) pokémons inside OhMyMeteor's meteors that fall down to the overworld!
 '''
-#logoFile = ""
+logoFile = "assets/pokemeteors/icon.png"
 
 [[dependencies.pokemeteors]]
 modId = "minecraft"

@@ -27,13 +27,10 @@ public final class PokemeteorsFabric implements ModInitializer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //PokemeteorsCommon.init(FabricLoader.getInstance().getConfigDir().resolve(PokemeteorsCommon.MOD_ID));
         PKMFabricEntities.registerEntities();
 
-        //TODO do the same for neoforge
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((minecraftServer, lifecycledResourceManager, b) -> {
             //yes reloads for each dimension
-            //TODO maybe just pick one? Datapacks aren't per-dimension right? But multiverse and stuff exists so idk
             minecraftServer.getAllLevels().forEach(PokemeteorUtils::reInitStructures);
 
             if(FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")){
