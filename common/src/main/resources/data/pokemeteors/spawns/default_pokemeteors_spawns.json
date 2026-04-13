@@ -29,7 +29,7 @@
     {
       "species": "cobblemon:clefairy",
       "chance": 10,
-      "max_meteor_size": 7,
+      "max_meteor_size": 6,
       "min_meteor_size": 3,
       "meteor_size_class": "small",
       "unique_meteor": "",
@@ -82,6 +82,15 @@
     },
     {
       "species": "cobblemon:lunala",
+      "chance": 1,
+      "max_meteor_size": 27,
+      "min_meteor_size": 27,
+      "meteor_size_class": "big",
+      "unique_meteor": "pokemeteors:simple_spawn",
+      "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:necrozma",
       "chance": 1,
       "max_meteor_size": 27,
       "min_meteor_size": 27,

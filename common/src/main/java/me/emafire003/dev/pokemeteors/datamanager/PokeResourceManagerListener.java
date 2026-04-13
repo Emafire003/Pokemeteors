@@ -75,7 +75,7 @@ public class PokeResourceManagerListener extends SimpleJsonResourceReloadListene
         }
 
         if(result != null) {
-            //removes stuff if //TODO say that it must be the first one the "all_default"
+            //removes stuff if
             if(!result.getOverrideFor().isEmpty() && result.getOverrideFor().getFirst().equalsIgnoreCase("all_default") && !ignore_default){
                 PokemeteorsCommon.LOGGER.info(fileId + " has disabled the default pokemeteor spawn config");
                 ignore_default = true;
