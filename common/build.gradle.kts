@@ -21,8 +21,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 
     //OhMyMeteors && dependencies
-    modCompileOnly((files("run/libs/ohmymeteors-1.3.1+1.21-dev.jar")))
-    //modCompileOnly("maven.modrinth:ohmymeteors:${property("omm_version")}")
+    modCompileOnly("maven.modrinth:ohmymeteors:${property("omm_version")}")
     modCompileOnly("maven.modrinth:structureplacerapi:${property("structureplacerapi_version")}") //StructurePlacerAPI
     modCompileOnly("maven.modrinth:particleanimationlib:${property("pal_version")}") //PAL
     implementation("com.github.PiTheGuy:SchemConvert:master-SNAPSHOT") //SchemConvert

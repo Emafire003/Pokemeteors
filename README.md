@@ -41,10 +41,10 @@ The structure inside the file should be as it follows:
   "speciesMeteorChances": [
     {
       "species": "cobblemon:<pokemonname>",
-      "chance": 1 in x chances,
-      "max_meteor_size": 10,
-      "min_meteor_size": 5,
-      "meteor_size_class": "small|medium|big|huge",
+      "chance": <1 in x chances>,
+      "max_meteor_size": <1-50>,
+      "min_meteor_size": <1-50>,
+      "meteor_size_class": "<small|medium|big|huge>",
       "unique_meteor": "",
       "aspect_unique_meteor": {}
     },
@@ -65,15 +65,27 @@ The structure inside the file should be as it follows:
 
 Inside `specieMeteorChances` you can put pokémons that should spawn with a meteor.
 Each pokemon-chance has a few parameters you have to fill and others which allow you to specify with which meteor structure it will spawn
-- `species`: The id of the pokemon that should spawn with a meteor
-- `chance`: The chance of this pokemon spawing with a meteor vs spawning normally, expressed as 1 in every <x> chance of this happening. (For example, setting it to `2` will make the pokemon spawn with a 50% chance, aka half of the times)
+- `species`: The id of the pokémon that should spawn with a meteor
+- `chance`: The chance of this pokémon spawing with a meteor vs spawning normally, expressed as 1 in every <x> chance of this happening. (For example, setting it to `2` will make the pokemon spawn with a 50% chance, aka half of the times)
 - `max_meteor_size`: A number between 1 and 50, represents how big the meteor can be at most. The bigger the meteor, the bigger the explosion. And the meteor entity that gets rendered in game
 - `min_meteor_size`: Same as above, but the minimum size
-- `meteor_size_class`: One of 4 possible values, `small`, `medium`, `big`, `huge`. This value is used to determine how deep the meteor structure will be embedded, and a rough description of how big the meteor is going to be. It also used to determine with which meteor structure the pokemon will spawn, in fact the to each class corresponds a set of meteor structure types
-- `unique_meteor`: An option value, overrides the meteor structure selected by the meteor size class and instead spawns a specfic structure, given its id. 
-- `aspect_unique_meteor`: similar to the option above, it's a map of `aspect:structure_id`, and it will spawn a unique meteor structure for the given aspect. An example is Minior, with each core color spawning with its own meteor strucure
+- `meteor_size_class`: One of 4 possible values, `small`, `medium`, `big`, `huge`. This value is used to determine how deep the meteor structure will be embedded, and a rough description of how big the meteor is going to be. It also used to determine with which meteor structure the pokémon will spawn, in fact the to each class corresponds a set of meteor structure types
+- `unique_meteor`: An option value, overrides the meteor structure selected by the meteor size class and instead spawns a specific structure, given its id. 
+- `aspect_unique_meteor`: similar to the option above, it's a map of `aspect:structure_id`, and it will spawn a unique meteor structure for the given aspect. An example is Minior, with each core color spawning with its own meteor structure
 
-`override_for` lets you specify overrides on specific pokemons, for example let's say you want to spawn a minior with your own structure, but the default datapack spawns with the default colored meteors. By putting `"cobblemon:minior"` in the list your config will overidde the default (or other) values. To override all of the default pokemon spawns you can add as a first element of the list `"all_default"`
+`override_for` lets you specify overrides on specific pokémons, for example let's say you want to spawn a minior with your own structure, but the default datapack spawns with the default colored meteors. By putting `"cobblemon:minior"` in the list your config will override the default (or other) values. To override all of the default pokémon spawns you can add as a first element of the list `"all_default"`
+### Customize meteor structures (datapack)
+You can add your own structures for the meteors the pokémon spawn in. These have the same format of the vanilla StructureBlock `.nbt` files, and you can generated them the same way. You can also use worldedit and litematica by using the command provided by [OhMyMeteors](https://modrinth.com/mod/ohmymeteors) (`/omm custom`), check that modpage for more info. 
+You can place those files inside `data/pokemeteors/structure/`. Place unique structures that you don't want to spawn normally but just for some kind of pokemon in the root folder (<-- that one), and other meteors in the folder corresponding to their size category, like `small` for small meteors etc. Inside the size folders you can also have a 'special' folder, like so: `data/pokemeteors/structure/small/special/`. A structure placed in the special folder will have a rarer (10%) chance of appearing instead of the normal ones. You can configure this chance in OhMyMeteor's config
+If you want to get rid of a specific structure added by default by this mod you can add a file in the corresponding folder with the same name but prefixed with "ignore_". For example, if you don't want to spawn the `solmeteor` structure, you will add this file in this location: `data/pokemeteors/structure/medium/ignore_solmeteor.nbt`. You can also decide to ignore all default meteors added by the mod and add your own instead. In this case you can place a file nameed `ignore_defualt.nbt` in the `structure` root folder.
+
+To spawn a pokemon, inside the meteor structure you must place a sing (of any kind) where you write `pokespawn`. The pokemon will then spawn in that position when the metor lands
+<add example image>
+
+### Example datapack
+You can find a link to a datapack example [here](https://github.com/Emafire003/Pokemeteors/releases/download/datapack-v0/pokemeteors_example_datapack.zip)
+
+If you have questions, open an issue on GitHub or shoot me a message on discord at @Emafire003
 
 ### Config
 By installing YetAnotherConfigLib and ModMenu you can tweak a few settings, regarding the spawn of meteors when using the /pokespawn command as well as when and if to announce meteor spawns along with which pokémon they contain etc
