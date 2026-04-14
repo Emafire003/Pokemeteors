@@ -1,4 +1,6 @@
-# Pokémeteors mod (maybe use the blockbench title thing)
+<img width="1013" height="128" alt="pokemeteors_text" src="https://github.com/user-attachments/assets/bf329863-5b17-4854-8151-02f82ef53c72" />
+
+#
 A mod that allows space-adjacent (or normal!) cobblemon pokémons to spawn inside a falling meteorite, 
 courtesy of the OhMyMeteors mod!
 
