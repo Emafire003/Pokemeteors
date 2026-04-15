@@ -1,17 +1,19 @@
-<img width="1013" height="128" alt="pokemeteors_text" src="https://github.com/user-attachments/assets/bf329863-5b17-4854-8151-02f82ef53c72" />
+<img width="1013" height="128" style="vertical-align:middle" alt="pokemeteors_text" src="https://github.com/user-attachments/assets/bf329863-5b17-4854-8151-02f82ef53c72" />
 
 #
 A mod that allows space-adjacent (or normal!) cobblemon pokémons to spawn inside a falling meteorite, 
 courtesy of the OhMyMeteors mod!
 
-//gif goes here//
+<div align=center>
+<img width="533" height="300" style="vertical-align:middle" alt="miniortake160fps1080p-ezgif com-optimize" src="https://github.com/user-attachments/assets/727f13e7-e21d-41f3-84b1-dce242b1ee84" />
+</div>
 
 When a pokémon normally spawns, the mod checks if it should spawn inside a meteor (configurable with datapacks), and with which chance. Then, a falling meteor
 spanws in the sky above the pokémon's spawn position, creating an impact crater along with a meteor and the pokémon itself. The pokémon follows all of the normal
 spawn rules you can define with Cobblemon's datapacks, so for example if it should have spawned only in cold biomes, it will spawn only in cold biomes, if it was supposed
 to be of a level between 20 and 30, it will have a level between 20 and 30 and so on. 
 
-[![nodecraft](https://github.com/user-attachments/assets/66b45404-d8c6-497b-8cc8-ac08adfae0de)](https://nodecraft.com/r/emalightdev) 
+<img width="1013" height="128" alt="pokemeteors_text" href="https://nodecraft.com/r/emalightdev" src="https://github.com/user-attachments/assets/66b45404-d8c6-497b-8cc8-ac08adfae0de" />
 
 The best way to enjoy this mod is with other people on a server, so you can use the code EMALIGHTDEV on [Nodecraft](https://nodecraft.com/r/emalightdev) for discount!
 
