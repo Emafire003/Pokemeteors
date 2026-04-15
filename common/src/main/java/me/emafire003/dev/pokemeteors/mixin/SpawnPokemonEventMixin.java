@@ -38,20 +38,17 @@ public abstract class SpawnPokemonEventMixin {
 			if(SPECIES_CHANCE_CONFIG.contains(sp) && e.level().canSeeSky(e.blockPosition())){
 				if(e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
 					if(!pokemon.level().isClientSide()){
-						if(SPECIES_CHANCE_CONFIG.getUniqueMeteor(pokemon).contains("simple_spawn") || ConfigSettings.HANDLER.instance().onlySimpleSpawns){
-							PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, true);
-						}else {
-							PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, false);
-
-						}
-						pokemon.finalizeSpawn((ServerLevelAccessor) e.level(), e.level().getCurrentDifficultyAt(pokemon.blockPosition()), MobSpawnType.NATURAL, null);
 
 						@SuppressWarnings("rawtypes")
 						SingleEntitySpawnAction spawnAction = ((SingleEntitySpawnAction) (Object) this);
-
 						SpawnablePosition spawnablePosition = spawnAction.getSpawnablePosition();
 
-						CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent<>(e, spawnAction.getSpawnablePosition()), (spawnEvent -> {return null;}), (spawnEvent) -> {
+						pokemon.setPos(spawnablePosition.getPosition().getCenter());
+
+                        PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, SPECIES_CHANCE_CONFIG.getUniqueMeteor(pokemon).contains("simple_spawn") || ConfigSettings.HANDLER.instance().onlySimpleSpawns);
+						pokemon.finalizeSpawn((ServerLevelAccessor) e.level(), e.level().getCurrentDifficultyAt(pokemon.blockPosition()), MobSpawnType.NATURAL, null);
+
+						CobblemonEvents.ENTITY_SPAWN.postThen(new SpawnEvent<>(e, spawnAction.getSpawnablePosition()), (spawnEvent -> null), (spawnEvent) -> {
                             //noinspection unchecked
                             spawnAction.getEntity().emit(e);
 							if (e instanceof Mob) {
