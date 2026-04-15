@@ -11,10 +11,14 @@ spanws in the sky above the pokémon's spawn position, creating an impact crater
 spawn rules you can define with Cobblemon's datapacks, so for example if it should have spawned only in cold biomes, it will spawn only in cold biomes, if it was supposed
 to be of a level between 20 and 30, it will have a level between 20 and 30 and so on. 
 
-//sponsor goes here
+[![nodecraft](https://github.com/user-attachments/assets/66b45404-d8c6-497b-8cc8-ac08adfae0de)](https://nodecraft.com/r/emalightdev) 
+
+The best way to enjoy this mod is with other people on a server, so you can use the code EMALIGHTDEV on [Nodecraft](https://nodecraft.com/r/emalightdev) for discount!
+
 ## Features
 Pokemons can spawn with different meteor structures of different size classes, they can also be unique and be specific for some
 of their aspects (for example Minior's core color)
+
 //insert meteor structures examples, maybe a collage?//
 
 ### Default spawns
@@ -81,8 +85,10 @@ You can add your own structures for the meteors the pokémon spawn in. These hav
 You can place those files inside `data/pokemeteors/structure/`. Place unique structures that you don't want to spawn normally but just for some kind of pokemon in the root folder (<-- that one), and other meteors in the folder corresponding to their size category, like `small` for small meteors etc. Inside the size folders you can also have a 'special' folder, like so: `data/pokemeteors/structure/small/special/`. A structure placed in the special folder will have a rarer (10%) chance of appearing instead of the normal ones. You can configure this chance in OhMyMeteor's config
 If you want to get rid of a specific structure added by default by this mod you can add a file in the corresponding folder with the same name but prefixed with "ignore_". For example, if you don't want to spawn the `solmeteor` structure, you will add this file in this location: `data/pokemeteors/structure/medium/ignore_solmeteor.nbt`. You can also decide to ignore all default meteors added by the mod and add your own instead. In this case you can place a file nameed `ignore_defualt.nbt` in the `structure` root folder.
 
-To spawn a pokemon, inside the meteor structure you must place a sing (of any kind) where you write `pokespawn`. The pokemon will then spawn in that position when the metor lands
-<add example image>
+To spawn a pokemon, inside the meteor structure you must place a sign
+ (of any kind) where you write `pokespawn`. The pokemon will then spawn in that position when the metor lands
+
+<img width="1920" height="991" alt="sign example" src="https://github.com/user-attachments/assets/6bc03446-2e66-44fc-851a-fb491ef5c373" />
 
 ### Example datapack
 You can find a link to a datapack example [here](https://github.com/Emafire003/Pokemeteors/releases/download/datapack-v0/pokemeteors_example_datapack.zip)
@@ -93,7 +99,10 @@ If you have questions, open an issue on GitHub or shoot me a message on discord 
 By installing YetAnotherConfigLib and ModMenu you can tweak a few settings, regarding the spawn of meteors when using the /pokespawn command as well as when and if to announce meteor spawns along with which pokémon they contain etc
 
 ### Support
-Links and stuff TODO
+The best way to do that, is sharing the mod with as many people as you know, feel free to make video tutorials/gameplayes and such! It would really help!
+
+You can directly support me by offering a coffe at this link:
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S88307C)
 
 ### License
 GNU GPL3. Yes you can add this mod to modpacks without asking me.
