@@ -47,19 +47,19 @@
     {
       "species": "cobblemon:lunatone",
       "chance": 3,
-      "max_meteor_size": 5,
-      "min_meteor_size": 8,
+      "max_meteor_size": 8,
+      "min_meteor_size": 5,
       "meteor_size_class": "medium",
-      "unique_meteor": "lunmeteor",
+      "unique_meteor": "pokemeteors:medium/lunmeteor",
       "aspect_unique_meteor": {}
     },
     {
       "species": "cobblemon:solrock",
       "chance": 3,
-      "max_meteor_size": 5,
-      "min_meteor_size": 8,
+      "max_meteor_size": 8,
+      "min_meteor_size": 5,
       "meteor_size_class": "medium",
-      "unique_meteor": "solmeteor",
+      "unique_meteor": "pokemeteors:medium/solmeteor",
       "aspect_unique_meteor": {}
     },
     {

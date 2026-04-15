@@ -88,7 +88,14 @@ public class PokemeteorUtils {
 
         meteor.setPosRaw(pos_vel.getA().x, pos_vel.getA().y, pos_vel.getA().z);
 
-        meteor.setSize(world.getRandom().nextIntBetweenInclusive(Math.max(0, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon)), Math.min(50, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon))));
+        int max = Math.max(0, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon));
+        int min = Math.min(50, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon));
+        if(min > max){
+            PokemeteorsCommon.LOGGER.warn("Heads up! For the pokemon: " + spawnedPokemon.getDisplayName() +
+                    " you have configured a max meteor size that is lower than the min meteor sizes! " +
+                    "The two values have been inverted for this spanw, but you might want to fix your datapack!");
+        }
+        meteor.setSize(world.getRandom().nextIntBetweenInclusive(Math.min(max, min), Math.max(max, min)));
 
         meteor.setDeltaMovement(targetSpawnPos.subtract(meteor.position()).normalize().multiply(1,1,1).add(0, Config.DOWNWARDS_SPEED_MODIFIER, 0));
         
