@@ -21,7 +21,8 @@ The best way to enjoy this mod is with other people on a server, so you can use 
 Pokemons can spawn with different meteor structures of different size classes, they can also be unique and be specific for some
 of their aspects (for example Minior's core color)
 
-//insert meteor structures examples, maybe a collage?//
+<img width="1920" height="991" alt="screens" src="https://github.com/user-attachments/assets/8ef951a2-6f1e-4ec8-afe5-761db83c8931" />
+
 
 ### Default spawns
 By default the mod adds meteor spawns for:
@@ -101,20 +102,23 @@ If you have questions, open an issue on GitHub or shoot me a message on discord 
 By installing YetAnotherConfigLib and ModMenu you can tweak a few settings, regarding the spawn of meteors when using the /pokespawn command as well as when and if to announce meteor spawns along with which pokémon they contain etc
 ### Suggested config for OhMyMeteors
 Here are some suggestions on how to edit Oh My, Meteors! config to have a better experience when using it with this mod:
+- `min_meteor_spawn_distance:15` makes the meteor spawn a little further away so they fall more diagonally
+- `max_meteor_spawn_distance:50` same as above
 - `meteor_spawn_chance:-1` disables natural meteor spawn
-- area_explosion_sound:true allows
-- area_explosion_sound_radius:200
+- `area_explosion_sound:true` allows more people to hear the meteor falling
+- `area_explosion_sound_radius:200` but not too many people
+- `spawn_fire_with_meteor:false` especially for simple_spawn pokemon, they might catch on fire. But on the other hand, meteor craters look much cooler with fire. 
 
 
 <details>
-  <summary>Config file version 7 version</summary>
+  <summary>Config file version 7 example (OhMyMeteors 1.4.0)</summary>
   
   ```yaml
   #The version of the config. DO NOT CHANGE IT :D | default= 7 | type= Integer
 version:7
 
 #Expressed in blocks, represents the min distance (as in a radius) from the origin of the meteor (like a player) in which the meteor wont' spawn in. (Remember that it has an angled trajectory so it could end up in that area regardless) | default= 2 | type= Integer
-min_meteor_spawn_distance:10
+min_meteor_spawn_distance:15
 #Expressed in blocks, represents the max distance (as in a radius) from the origin of the meteor (like a player) in which a meteor can spawn in. (Remember that it has an angled trajectory so it could end up in that area regardless) | default= 25 | type= Integer
 max_meteor_spawn_distance:50
 #The world height (y level) at which meteors spawn in | default= 300 | type= Integer
