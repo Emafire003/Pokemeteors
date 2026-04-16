@@ -21,8 +21,7 @@ The best way to enjoy this mod is with other people on a server, so you can use 
 Pokemons can spawn with different meteor structures of different size classes, they can also be unique and be specific for some
 of their aspects (for example Minior's core color)
 
-<img width="1920" height="991" alt="screens" src="https://github.com/user-attachments/assets/8ef951a2-6f1e-4ec8-afe5-761db83c8931" />
-
+<img width="1920" height="991" alt="screens_updated" src="https://github.com/user-attachments/assets/aa303adf-cef8-45d6-83db-bf68c5c776f7" />
 
 ### Default spawns
 By default the mod adds meteor spawns for:
@@ -40,7 +39,6 @@ By default the mod adds meteor spawns for:
 
 ### Customize spawns (datapack)
 You can customize which pokémon spawn with meteors, what are the chance, and the meteor structure that they spawn in.
-//TODO add a default datapack example
 
 To do this, you must create a json file inside `data/pokemeteors/spawns/<yourfilename>.json`
 The structure inside the file should be as it follows:
@@ -79,7 +77,7 @@ Each pokemon-chance has a few parameters you have to fill and others which allow
 - `max_meteor_size`: A number between 1 and 50, represents how big the meteor can be at most. The bigger the meteor, the bigger the explosion. And the meteor entity that gets rendered in game
 - `min_meteor_size`: Same as above, but the minimum size
 - `meteor_size_class`: One of 4 possible values, `small`, `medium`, `big`, `huge`. This value is used to determine how deep the meteor structure will be embedded, and a rough description of how big the meteor is going to be. It also used to determine with which meteor structure the pokémon will spawn, in fact the to each class corresponds a set of meteor structure types
-- `unique_meteor`: An option value, overrides the meteor structure selected by the meteor size class and instead spawns a specific structure, given its id. 
+- `unique_meteor`: An option value, overrides the meteor structure selected by the meteor size class and instead spawns a specific structure, given its id. You can also use `"pokemeteors:simple_spawn"` to spawn the pokemon at the center of the meteor impact crater without any kind of structure
 - `aspect_unique_meteor`: similar to the option above, it's a map of `aspect:structure_id`, and it will spawn a unique meteor structure for the given aspect. An example is Minior, with each core color spawning with its own meteor structure
 
 `override_for` lets you specify overrides on specific pokémons, for example let's say you want to spawn a minior with your own structure, but the default datapack spawns with the default colored meteors. By putting `"cobblemon:minior"` in the list your config will override the default (or other) values. To override all of the default pokémon spawns you can add as a first element of the list `"all_default"`
