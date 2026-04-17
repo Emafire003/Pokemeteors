@@ -9,9 +9,9 @@ courtesy of the OhMyMeteors mod!
 </div>
 
 When a pokémon normally spawns, the mod checks if it should spawn inside a meteor (configurable with datapacks), and with which chance. Then, a falling meteor
-spanws in the sky above the pokémon's spawn position, creating an impact crater along with a meteor and the pokémon itself. The pokémon follows all of the normal
-spawn rules you can define with Cobblemon's datapacks, so for example if it should have spawned only in cold biomes, it will spawn only in cold biomes, if it was supposed
-to be of a level between 20 and 30, it will have a level between 20 and 30 and so on. Note: only pokemon spawned on the surface (aka whenever they can see the sky) will be able to trigger a meteor spawn. This is to prevent meteors trying to reach caves but ending up exploding on the surface.
+spawns in the sky above the pokémon's spawn position, creating an impact crater along with a meteor and the pokémon itself when it lands. The pokémon follows all of the normal spawn rules you can define with Cobblemon's datapacks, so for example if it should have spawned only in cold biomes, it will spawn only in cold biomes, if it was supposed to be of a level between 20 and 30, it will have a level between 20 and 30 and so on. Note: only pokemon spawned on the surface (aka whenever they can see the sky) will be able to trigger a meteor spawn. This is to prevent meteors trying to reach caves but ending up exploding on the surface.
+
+It's highly suggested to also download Cobblemon Megashowdown mod, a lot of space-ish pokemon models are added by that mod.
 
 <img width="1013" height="128" alt="pokemeteors_text" href="https://nodecraft.com/r/emalightdev" src="https://github.com/user-attachments/assets/66b45404-d8c6-497b-8cc8-ac08adfae0de" />
 
