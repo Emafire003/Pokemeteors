@@ -18,7 +18,6 @@ import java.util.List;
 
 public class PokemeteorUtils {
 
-
     public static List<ResourceLocation> METEOR_STRUCTURES = new ArrayList<>();
 
     public static void reInitStructures(ServerLevel world){
@@ -97,7 +96,7 @@ public class PokemeteorUtils {
         }
         meteor.setSize(world.getRandom().nextIntBetweenInclusive(Math.min(max, min), Math.max(max, min)));
 
-        meteor.setDeltaMovement(targetSpawnPos.subtract(meteor.position()).normalize().multiply(1,1,1).add(0, Config.DOWNWARDS_SPEED_MODIFIER, 0));
+        meteor.setDeltaMovement(targetSpawnPos.subtract(meteor.position()).normalize().multiply(1,1,1).add(0, -Config.DOWNWARDS_SPEED_MODIFIER, 0));
         
         return meteor;
     }
