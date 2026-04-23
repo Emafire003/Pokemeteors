@@ -1,5 +1,6 @@
 package me.emafire003.dev.pokemeteors.entity;
 
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.ohmymeteors.config.Config;
@@ -9,29 +10,36 @@ import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.item.component.WritableBookContent;
+import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SignBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.emafire003.dev.pokemeteors.util.PokemeteorUtils.METEOR_STRUCTURES;
@@ -43,6 +51,9 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
     protected PokemonEntity spawnedPokemon;
     /// If the meteor is a simple spawn meteor no structure will be generated, the pokemon will be the only thing spawning
     protected boolean simpleSpawn = false;
+    @Deprecated
+    protected int megaPokemon = 0;
+    protected List<String> aspectsToAdd = new ArrayList<>();
 
     public PokeMeteorEntity(EntityType<? extends AbstractHurtingProjectile> entityType, Level world) {
         super(entityType, world);
@@ -214,27 +225,82 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
 
         placer.actionOnBlocksPlacedByStructure(((structureBlockInfo, serverLevelAccessor) -> {
+
+            AtomicBoolean found = new AtomicBoolean(false);
             if(structureBlockInfo.state().getBlock() instanceof SignBlock && structureBlockInfo.nbt() != null){
                 ListTag front_messages =  structureBlockInfo.nbt().getCompound("front_text").getList("messages", Tag.TAG_STRING);//(ListTag) structureBlockInfo.nbt().getCompound("front_text").get("messages");
-                AtomicBoolean found = new AtomicBoolean(false);
+
                 front_messages.forEach(msg -> {
                     if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                        found.set(true);
                     }
+                    megaPokemon = checkMega(msg);
+
+
                 });
                 ListTag back_messages =  structureBlockInfo.nbt().getCompound("back_text").getList("messages", Tag.TAG_STRING);
                 back_messages.forEach(msg -> {
                     if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("pokespawn")){
                         found.set(true);
                     }
+                    if(megaPokemon == 0){
+                        megaPokemon = checkMega(msg);
+                    }
                 });
 
-                //TODO workout how to spawn multiple pokemon
-                if(found.get()){
-                    this.spawnPokemon(structureBlockInfo.pos());
-                    return new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), Blocks.AIR.defaultBlockState(), null);
+            }
+
+            /// Book reading
+            if(structureBlockInfo.state().getBlock() instanceof LecternBlock && structureBlockInfo.nbt() != null){
+                LecternBlockEntity lectern = level().getBlockEntity(structureBlockInfo.pos(), BlockEntityType.LECTERN).get();
+                if(lectern.hasBook()){
+                    WritableBookContent writableBookContent = lectern.getBook().getComponents().get(DataComponents.WRITABLE_BOOK_CONTENT);
+
+                    if(writableBookContent == null){
+                        WrittenBookContent writtenBookContent = lectern.getBook().getComponents().get(DataComponents.WRITTEN_BOOK_CONTENT);
+                        if(writtenBookContent != null){
+                            List<Filterable<Component>> pages = writtenBookContent.pages();
+                            OhMyMeteors.LOGGER.info("the contents of the fist page: " + pages.getFirst().get(false).getString());
+                            if(pages.getFirst().get(false).getString().startsWith("pokespawn")){
+                                found.set(true);
+                                //TODO wiki
+                                /// Each page is an aspect
+                                pages.forEach(page -> {
+                                    if(pages.getFirst() == page){
+                                        return;
+                                    }
+                                    aspectsToAdd.add(page.get(false).getString());
+                                });
+                            }
+                        }
+
+                    }else{
+                        List<Filterable<String>> pages = writableBookContent.pages();
+                        OhMyMeteors.LOGGER.info("the contents of the fist page: " + pages.getFirst().get(false));
+                        if(pages.getFirst().get(false).startsWith("pokespawn")){
+                            found.set(true);
+                            //TODO wiki
+                            /// Each page is an aspect
+                            pages.forEach(page -> {
+                                if(pages.getFirst() == page){
+                                    return;
+                                }
+                                aspectsToAdd.add(page.get(false));
+                            });
+                        }
+                    }
+
+
                 }
-            } //worldedit can leave the structure void behind soo
+
+            }
+            //TODO workout how to spawn multiple pokemon
+            if(found.get()){
+                this.spawnPokemon(structureBlockInfo.pos());
+                return new StructureTemplate.StructureBlockInfo(structureBlockInfo.pos(), Blocks.AIR.defaultBlockState(), null);
+            }
+
+            //worldedit can leave the structure void behind soo
             if(structureBlockInfo.state().getBlock().equals(Blocks.STRUCTURE_VOID)){
                 BlockEntity blockEntity = this.level().getBlockEntity(structureBlockInfo.pos());
                 StructureTemplate.StructureBlockInfo info;
@@ -250,6 +316,23 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
         return placer;
         //super.getPlacer();
+    }
+
+    /**Cheks if there is a mega tag on the sing. 0 = no mega, 1 = normal mega, 2 = x mega, 3 = y mega, 4 = z mega*/
+    protected static int checkMega(Tag msg){
+        int mega = 0;
+        if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("mega")){
+            if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("megaX")){
+                mega = 2; //Y
+            }else if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("megaY")){
+                mega = 3; //X
+            }else if(msg.getAsString().replaceAll("\"", "").equalsIgnoreCase("megaZ")){
+                mega = 4; //Z, at some point they might want to add those as well
+            }else{
+                mega = 1; //normal mega
+            }
+        }
+        return mega;
     }
 
     /**Spawns a pokemon with some ticks of resistance to damage and fire as well as not inside some blocks*/
@@ -271,8 +354,27 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
             });
         }
 
-
         this.level().addFreshEntity(spawnedPokemon);
+        OhMyMeteors.LOGGER.info("aspects: " + spawnedPokemon.getAspects());
+        if(megaPokemon != 0){
+            switch (megaPokemon){
+                case 2: {
+                    spawnedPokemon.getAspects().add("mega_x");
+                }case 3: {
+                    spawnedPokemon.getAspects().add("mega_y");
+                }case 4: {
+                    spawnedPokemon.getAspects().add("mega_z");
+                } default:{
+                    spawnedPokemon.getAspects().add("mega");
+                }
+            }
+        }
+        if(!aspectsToAdd.isEmpty()){
+            spawnedPokemon.getAspects().addAll(aspectsToAdd);
+            OhMyMeteors.LOGGER.info("added aspects: " + aspectsToAdd);
+            OhMyMeteors.LOGGER.info("The now apsects: " + spawnedPokemon.getAspects());
+        }
+
         spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 30, 255, true, false)));
         //5 seconds of fire resistance to avoid fire damage
         spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*5, 1, true, false)));

@@ -106,6 +106,15 @@
       "meteor_size_class": "huge",
       "unique_meteor": "pokemeteors:huge/kyurem_huge",
       "aspect_unique_meteor": {}
+    },
+    {
+      "species": "cobblemon:abomasnow",
+      "chance": 1,
+      "max_meteor_size": 3,
+      "min_meteor_size": 3,
+      "meteor_size_class": "huge",
+      "unique_meteor": "pokemeteors:mega_meteor_test",
+      "aspect_unique_meteor": {}
     }
   ],
   "override_for": [],
