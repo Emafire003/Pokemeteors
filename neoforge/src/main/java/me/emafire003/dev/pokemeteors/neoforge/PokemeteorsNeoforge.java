@@ -45,7 +45,7 @@ public class PokemeteorsNeoforge {
     }
 
     @SubscribeEvent
-    public static void registerDataListeners(AddReloadListenerEvent event) {
+    public void registerDataListeners(AddReloadListenerEvent event) {
         event.addListener(new PokeResourceManagerListener());
     }
 
