@@ -1,11 +1,11 @@
 package me.emafire003.dev.pokemeteors.entity;
 
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import me.emafire003.dev.ohmymeteors.OhMyMeteors;
 import me.emafire003.dev.ohmymeteors.config.Config;
 import me.emafire003.dev.ohmymeteors.entities.MeteorProjectileEntity;
 import me.emafire003.dev.ohmymeteors.util.MeteorSizeClass;
+import me.emafire003.dev.ohmymeteors.util.scheduler.SchedulerUtils;
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.util.PokemeteorUtils;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
@@ -37,9 +37,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.emafire003.dev.pokemeteors.util.PokemeteorUtils.METEOR_STRUCTURES;
@@ -260,7 +258,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
                         WrittenBookContent writtenBookContent = lectern.getBook().getComponents().get(DataComponents.WRITTEN_BOOK_CONTENT);
                         if(writtenBookContent != null){
                             List<Filterable<Component>> pages = writtenBookContent.pages();
-                            OhMyMeteors.LOGGER.info("the contents of the fist page: " + pages.getFirst().get(false).getString());
                             if(pages.getFirst().get(false).getString().startsWith("pokespawn")){
                                 found.set(true);
                                 //TODO wiki
@@ -276,7 +273,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
 
                     }else{
                         List<Filterable<String>> pages = writableBookContent.pages();
-                        OhMyMeteors.LOGGER.info("the contents of the fist page: " + pages.getFirst().get(false));
                         if(pages.getFirst().get(false).startsWith("pokespawn")){
                             found.set(true);
                             //TODO wiki
@@ -355,7 +351,6 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         }
 
         this.level().addFreshEntity(spawnedPokemon);
-        OhMyMeteors.LOGGER.info("aspects: " + spawnedPokemon.getAspects());
         if(megaPokemon != 0){
             switch (megaPokemon){
                 case 2: {
@@ -371,14 +366,15 @@ public class PokeMeteorEntity extends MeteorProjectileEntity {
         }
         if(!aspectsToAdd.isEmpty()){
             spawnedPokemon.getAspects().addAll(aspectsToAdd);
-            OhMyMeteors.LOGGER.info("added aspects: " + aspectsToAdd);
-            OhMyMeteors.LOGGER.info("The now apsects: " + spawnedPokemon.getAspects());
         }
 
-        spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 30, 255, true, false)));
-        //5 seconds of fire resistance to avoid fire damage
-        spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*5, 1, true, false)));
 
+
+        SchedulerUtils.runLater(5, minecraftServer -> {
+            spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 30, 255, true, false)));
+            //Fire resistance to avoid them dying of fire damage, it will be cleared when caught
+            spawnedPokemon.addEffect((new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*9999, 0, true, false)));
+        });
     }
 
 

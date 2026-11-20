@@ -16,15 +16,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ServerLevelAccessor;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static me.emafire003.dev.pokemeteors.PokemeteorsCommon.SPECIES_CHANCE_CONFIG;
+import static me.emafire003.dev.pokemeteors.util.PokemeteorUtils.isOutside;
 
-@Debug(export = true)
 @Mixin(SingleEntitySpawnAction.class)
 public abstract class SpawnPokemonEventMixin {
 
@@ -35,7 +34,7 @@ public abstract class SpawnPokemonEventMixin {
             //SpawnablePosition spawnablePosition = spawnEvent.getSpawnablePosition();
 			Species sp = pokemon.getExposedSpecies();
 
-			if(SPECIES_CHANCE_CONFIG.contains(sp) && e.level().canSeeSky(e.blockPosition())){
+			if(SPECIES_CHANCE_CONFIG.contains(sp)){
 				if(e.level().getRandom().nextInt(SPECIES_CHANCE_CONFIG.getChance(sp)) == 0){
 					if(!pokemon.level().isClientSide()){
 
@@ -44,6 +43,9 @@ public abstract class SpawnPokemonEventMixin {
 						SpawnablePosition spawnablePosition = spawnAction.getSpawnablePosition();
 
 						pokemon.setPos(spawnablePosition.getPosition().getCenter());
+						if(!isOutside(spawnablePosition.getWorld(), spawnablePosition.getPosition())){
+							return;
+						}
 
                         PokemeteorUtils.spawnMeteor((ServerLevel) pokemon.level(), pokemon.position(), pokemon, SPECIES_CHANCE_CONFIG.getUniqueMeteor(pokemon).contains("simple_spawn") || ConfigSettings.HANDLER.instance().onlySimpleSpawns);
 						pokemon.finalizeSpawn((ServerLevelAccessor) e.level(), e.level().getCurrentDifficultyAt(pokemon.blockPosition()), MobSpawnType.NATURAL, null);

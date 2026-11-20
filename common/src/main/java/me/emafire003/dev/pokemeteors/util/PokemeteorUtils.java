@@ -7,10 +7,14 @@ import me.emafire003.dev.pokemeteors.PlatformSpecificStuff;
 import me.emafire003.dev.pokemeteors.PokemeteorsCommon;
 import me.emafire003.dev.pokemeteors.config.ConfigSettings;
 import me.emafire003.dev.pokemeteors.entity.PokeMeteorEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -90,14 +94,14 @@ public class PokemeteorUtils {
         int max = Math.max(0, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMinMeteorSize(spawnedPokemon));
         int min = Math.min(50, PokemeteorsCommon.SPECIES_CHANCE_CONFIG.getMaxMeteorSize(spawnedPokemon));
         if(min > max){
-            PokemeteorsCommon.LOGGER.warn("Heads up! For the pokemon: " + spawnedPokemon.getDisplayName() +
+            PokemeteorsCommon.LOGGER.warn("Heads up! For the pokémon: " + spawnedPokemon.getDisplayName() +
                     " you have configured a max meteor size that is lower than the min meteor sizes! " +
-                    "The two values have been inverted for this spanw, but you might want to fix your datapack!");
+                    "The two values have been inverted for this spawn, but you might want to fix your datapack!");
         }
         meteor.setSize(world.getRandom().nextIntBetweenInclusive(Math.min(max, min), Math.max(max, min)));
 
         meteor.setDeltaMovement(targetSpawnPos.subtract(meteor.position()).normalize().multiply(1,1,1).add(0, -Config.DOWNWARDS_SPEED_MODIFIER, 0));
-        
+
         return meteor;
     }
     
@@ -130,5 +134,20 @@ public class PokemeteorUtils {
             }
         }
         world.addFreshEntity(meteor);
+    }
+
+    public static boolean isOutside(Level level, BlockPos pos){
+        if(level.canSeeSky(pos)){
+            return true;
+        }
+        if(level.getBlockState(pos).getBlock().equals(Blocks.CAVE_AIR)){
+            return false;
+        }
+        BlockPos highest = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos);
+
+        if(Math.abs(highest.getY()-pos.getY()) < 15){
+            return true;
+        }
+        return false;
     }
 }

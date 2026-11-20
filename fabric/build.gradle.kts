@@ -40,6 +40,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${property("junit_version")}")
 
     //OhMyMeteors && dependencies
+    //modImplementation(files("run/libs/ohmymeteors-1.6.1+1.21.jar"))
     modImplementation("maven.modrinth:ohmymeteors:${property("omm_version")}")
     modImplementation("maven.modrinth:structureplacerapi:${property("structureplacerapi_version")}") //StructurePlacerAPI
     modImplementation("maven.modrinth:particleanimationlib:${property("pal_version")}") //PAL
@@ -47,6 +48,12 @@ dependencies {
     //YACL
     modImplementation("dev.isxander:yet-another-config-lib:${property("yacl_version")}-fabric")
     modImplementation("com.terraformersmc:modmenu:${property("modmenu_version")}")
+
+    modRuntimeOnly("org.graalvm.js:js:22.3.0")
+    modRuntimeOnly("org.graalvm.sdk:graal-sdk:22.3.0")
+    modRuntimeOnly("org.graalvm.regex:regex:22.3.0")
+    modRuntimeOnly("org.graalvm.truffle:truffle-api:22.3.0")
+    modRuntimeOnly("com.ibm.icu:icu4j:71.1")
 
 }
 
